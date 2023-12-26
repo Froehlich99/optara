@@ -14,6 +14,9 @@ import {
 import { Line } from "react-chartjs-2";
 import { faker } from "@faker-js/faker";
 
+type LineProps = React.ComponentProps<typeof Line>;
+type OptionsType = LineProps["options"];
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,32 +27,65 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
+export const options: OptionsType = {
   responsive: true,
+  interaction: {
+    mode: "nearest",
+    intersect: false,
+    axis: "x",
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false,
+      },
+      display: false,
+    },
+    y: {
+      ticks: {
+        display: false, // Hides the ticks
+        maxTicksLimit: 5,
+      },
+      border: {
+        display: false,
+      },
+    },
+  },
   plugins: {
     legend: {
-      position: "top" as const,
+      display: false,
     },
     title: {
       display: false,
     },
+    tooltip: {
+      displayColors: false,
+    },
   },
 };
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
+// TODO: Following is demo code, change to accept props for data
+// number of data points
+const numOfDataPoints = 20;
+
+// generate labels based on data points size
+const labels = Array.from(
+  { length: numOfDataPoints },
+  (_, i) => `Label ${i + 1}`
+);
 export const data = {
   labels,
   datasets: [
     {
-      label: "Dataset 1",
+      label: "",
       data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-    {
-      label: "Dataset 2",
-      data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
-      borderColor: "rgb(53, 162, 235)",
-      backgroundColor: "rgba(53, 162, 235, 0.5)",
+      get borderColor() {
+        // Check if last number in data is positive or negative
+        const lastNumber = this.data[this.data.length - 1];
+        return lastNumber >= 0 ? "green" : "red";
+      },
+      pointRadius: 0,
+      pointHoverRadius: 5,
+      tension: 0.1,
     },
   ],
 };

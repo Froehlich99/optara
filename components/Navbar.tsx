@@ -6,7 +6,7 @@ import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   return (
-    <nav className="flexBetween max-container padding-container relative z-30 py-5">
+    <nav className="flexBetween max-container padding-container relative z-30 py-3">
       <div className="flex flex-row items-center">
         <Link href={"/"}>
           <Image src={"/cb-logo.svg"} alt="logo" width={70} height={20}></Image>
