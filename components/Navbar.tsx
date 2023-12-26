@@ -2,13 +2,19 @@ import { NAV_LINKS } from "@/constants";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "./Button";
+import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   return (
     <nav className="flexBetween max-container padding-container relative z-30 py-5">
-      <Link href={"/"}>
-        <Image src={"/cb-logo.svg"} alt="logo" width={150} height={35}></Image>
-      </Link>
+      <div className="flex flex-row items-center">
+        <Link href={"/"}>
+          <Image src={"/cb-logo.svg"} alt="logo" width={70} height={20}></Image>
+        </Link>
+        <div className="px-3 lg:px-10">
+          <SearchBar />
+        </div>
+      </div>
       <ul className="hidden h-full gap-12 lg:flex">
         {NAV_LINKS.map((link) => (
           <Link
@@ -20,19 +26,11 @@ const Navbar = () => {
           </Link>
         ))}
       </ul>
-      <div className="lg:flexCenter hidden">
-        <Button
-          type="button"
-          title="Login"
-          icon="/user.svg"
-          variant="btn_dark_green"
-        />
-      </div>
       <Image
         src={"/menu.svg"}
         alt="menu"
-        width={32}
-        height={32}
+        width={25}
+        height={20}
         className="inline-block cursor-pointer lg:hidden"
       />
     </nav>
