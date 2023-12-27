@@ -6,6 +6,7 @@ import { useFloating } from "@floating-ui/react";
 import { size } from "@floating-ui/dom";
 import { autoUpdate } from "@floating-ui/dom";
 import { motion, AnimatePresence } from "framer-motion";
+import Button from "./Button";
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -70,6 +71,7 @@ const SearchBar = () => {
         onFocus={() => setisPopupOpen(true)}
         onBlur={() => setisPopupOpen(false)}
       />
+      {/* TODO: maybe extract into own component, passing setFloating to child loses context */}
       <AnimatePresence>
         {isPopupOpen ? (
           <motion.div
@@ -80,8 +82,22 @@ const SearchBar = () => {
               duration: 0.2,
             }}
             ref={refs.setFloating}
-            className="absolute h-[20rem] border border-gray-300 mt-5 bg-white rounded-lg"
-          ></motion.div>
+            className="absolute border border-gray-300 mt-5 bg-white rounded-lg"
+          >
+            {/* TODO: Placeholder, replace with mapping function and 3 predefined symbols */}
+            <div className="max-container relative flex flex-col ">
+              <h1 className="px-5 py-5 bold-20">Popular Stocks</h1>
+              <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
+                Alphabet
+              </button>
+              <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
+                Amazon
+              </button>
+              <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
+                Apple
+              </button>
+            </div>
+          </motion.div>
         ) : null}
       </AnimatePresence>
     </div>
