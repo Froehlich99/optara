@@ -6,7 +6,6 @@ import { useFloating } from "@floating-ui/react";
 import { size } from "@floating-ui/dom";
 import { autoUpdate } from "@floating-ui/dom";
 import { motion, AnimatePresence } from "framer-motion";
-import Button from "./Button";
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
