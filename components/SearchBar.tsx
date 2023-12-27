@@ -1,8 +1,32 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
+import { searchStock } from "@/lib/search";
+import { debounce } from "lodash";
+import { Popover } from "@headlessui/react";
 
 const SearchBar = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const debouncedSearch = debounce((query: string) => {
+    searchStocks(query);
+  }, 500);
+
+  const searchStocks = async (query: string) => {
+    try {
+      const data = await searchStock(query);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (searchQuery) {
+      debouncedSearch(searchQuery);
+    }
+  }, [searchQuery, debouncedSearch]);
+
   return (
-    <div className="relative">
+    <Popover className="relative">
       <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
         <svg
           className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -23,11 +47,19 @@ const SearchBar = () => {
       <input
         type="search"
         id="default-search"
-        className="block min-w-[22rem] w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white outline-none"
+        className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white outline-none"
         placeholder="Search Stocks"
-        required
+        onChange={(e) => setSearchQuery(e.target.value)}
       />
-    </div>
+      {/* <Popover.Panel static className="absolute z-10">
+        <div className="grid grid-cols-2">
+          <a href="/analytics">Analytics</a>
+          <a href="/engagement">Engagement</a>
+          <a href="/security">Security</a>
+          <a href="/integrations">Integrations</a>
+        </div>
+      </Popover.Panel> */}
+    </Popover>
   );
 };
 
