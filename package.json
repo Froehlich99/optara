@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.26.4",
     "@headlessui/react": "^1.7.17",
     "@vercel/postgres": "^0.5.1",
     "chart.js": "^4.4.1",
+    "framer-motion": "^10.16.16",
     "lodash": "^4.17.21",
     "next": "14.0.4",
     "next-auth": "^4.24.5",

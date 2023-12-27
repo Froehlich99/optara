@@ -85,7 +85,7 @@ export const data = {
       },
       pointRadius: 0,
       pointHoverRadius: 5,
-      tension: 0.1,
+      tension: 0.05,
     },
   ],
 };
