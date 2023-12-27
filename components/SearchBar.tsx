@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isPopupOpen, setisPopupOpen] = useState(false);
-  const { refs, floatingStyles } = useFloating({
+  const { refs } = useFloating({
     middleware: [
       size({
         apply({ rects, elements }) {
