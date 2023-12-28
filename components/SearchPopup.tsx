@@ -24,7 +24,7 @@ const SearchPopup: React.FC<SearchPopupProps> = ({
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.2 }}
         ref={refs.setFloating}
-        className="absolute border border-gray-300 mt-5 bg-white rounded-lg"
+        className="absolute border border-gray-300 mt-5 bg-white rounded-lg h-[21rem] overflow-scroll"
       >
         <div className="max-container relative flex flex-col ">
           <h1 className="px-5 py-5 bold-20">
