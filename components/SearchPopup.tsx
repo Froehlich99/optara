@@ -6,10 +6,15 @@ type SearchPopupProps = {
   refs: {
     setFloating: (el: HTMLElement | null) => void;
   };
+  stocks: any;
 };
 
 // SearchPopup component
-const SearchPopup: React.FC<SearchPopupProps> = ({ isPopupOpen, refs }) => (
+const SearchPopup: React.FC<SearchPopupProps> = ({
+  isPopupOpen,
+  refs,
+  stocks,
+}) => (
   <AnimatePresence>
     {isPopupOpen && (
       <motion.div
@@ -20,18 +25,30 @@ const SearchPopup: React.FC<SearchPopupProps> = ({ isPopupOpen, refs }) => (
         ref={refs.setFloating}
         className="absolute border border-gray-300 mt-5 bg-white rounded-lg"
       >
-        {/* TODO: Placeholder, replace with mapping function and 3 predefined symbols */}
         <div className="max-container relative flex flex-col ">
           <h1 className="px-5 py-5 bold-20">Popular Stocks</h1>
-          <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
-            Alphabet
-          </button>
-          <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
-            Amazon
-          </button>
-          <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
-            Apple
-          </button>
+          {stocks && stocks.length > 0 ? (
+            stocks.map((stock: any, index: any) => (
+              <button
+                key={index}
+                className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start"
+              >
+                {stock.name}
+              </button>
+            ))
+          ) : (
+            <>
+              <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
+                Alphabet
+              </button>
+              <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
+                Amazon
+              </button>
+              <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
+                Apple
+              </button>
+            </>
+          )}
         </div>
       </motion.div>
     )}

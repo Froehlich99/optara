@@ -1,16 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { searchStock } from "@/lib/search";
 import { debounce } from "lodash";
 import { useFloating } from "@floating-ui/react";
 import { size } from "@floating-ui/dom";
 import { autoUpdate } from "@floating-ui/dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { getStocks } from "@/app/actions";
 import SearchPopup from "./SearchPopup";
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isPopupOpen, setisPopupOpen] = useState(false);
+  const [stocks, setStocks] = useState([]);
   const { refs } = useFloating({
     middleware: [
       size({
@@ -24,13 +24,17 @@ const SearchBar = () => {
     whileElementsMounted: autoUpdate,
   });
 
-  const debouncedSearch = debounce((query: string) => {
-    searchStocks(query);
-  }, 500);
+  const debouncedSearch = React.useCallback(
+    debounce((query: string) => {
+      searchStocks(query);
+    }, 300),
+    []
+  );
 
   const searchStocks = async (query: string) => {
     try {
-      const data = await searchStock(query);
+      const data = await getStocks(query);
+      setStocks(data);
     } catch (error) {
       console.error(error);
     }
@@ -71,7 +75,7 @@ const SearchBar = () => {
         onFocus={() => setisPopupOpen(true)}
         onBlur={() => setisPopupOpen(false)}
       />
-      <SearchPopup isPopupOpen={isPopupOpen} refs={refs} />
+      <SearchPopup isPopupOpen={isPopupOpen} refs={refs} stocks={stocks} />
     </div>
   );
 };
