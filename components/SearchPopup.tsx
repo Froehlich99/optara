@@ -32,6 +32,8 @@ const SearchPopup: React.FC<SearchPopupProps> = ({
           </h1>
           {stocks && stocks.length > 0 ? (
             stocks.map((stock: any, index: any) => (
+              // Possible way to fetch images, quality and aspect ratio is varying
+              // https://storage.googleapis.com/iexcloud-hl37opg/api/logos/${stock.ticker}.png
               <Link
                 href={""}
                 key={index}
@@ -46,16 +48,38 @@ const SearchPopup: React.FC<SearchPopupProps> = ({
               </Link>
             ))
           ) : (
+            // TODO: Replace with map over highest trading volume or smth
             <>
-              <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
+              <Link
+                href=""
+                className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start items-center"
+              >
                 Alphabet
-              </button>
-              <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
+              </Link>
+              <Link
+                href=""
+                className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start items-center"
+              >
                 Amazon
-              </button>
-              <button className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start">
+              </Link>
+              <Link
+                href=""
+                className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start items-center"
+              >
                 Apple
-              </button>
+              </Link>
+              <Link
+                href=""
+                className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start items-center"
+              >
+                Microsoft
+              </Link>
+              <Link
+                href=""
+                className="h-[3rem] bold-16 px-5 hover:bg-gray-300 text-start items-center"
+              >
+                Intel
+              </Link>
             </>
           )}
         </div>
