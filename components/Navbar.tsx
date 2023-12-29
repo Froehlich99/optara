@@ -28,12 +28,12 @@ const Navbar = () => {
           <SearchBar />
         </div>
       </div>
-      <ul className="hidden h-full gap-12 md:flex">
+      <ul className="hidden h-full gap-12 md:flex items-center">
         {NAV_LINKS.map((link) => (
           <Link
             href={link.href}
             key={link.key}
-            className="regular-16 text-gray-50 flexCenter cursor-pointer pb-1.5 transition-all hover:font-bold"
+            className="regular-16 text-gray-50 flexCenter cursor-pointer transition-all hover:font-bold"
           >
             {link.label}
           </Link>
