@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 import TextUserButton from "./TextUserButton";
+import SignOutButton from "./SignOutButton";
 
 type PopupMenuProps = {
   isOpen: boolean;
@@ -42,6 +43,7 @@ const PopupMenu = ({
           </Link>
         ))}
         <TextUserButton />
+        <SignOutButton />
       </ul>
     )
   );
