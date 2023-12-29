@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useFloating } from "@floating-ui/react";
 import SearchBar from "./SearchBar";
 import PopupMenu from "./PopupMenu";
+import { UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   const [isOpen, setisOpen] = useState(false);
@@ -37,7 +38,9 @@ const Navbar = () => {
             {link.label}
           </Link>
         ))}
+        <UserButton afterSignOutUrl="/" />
       </ul>
+
       <Image
         src={!isOpen ? "/menu.svg" : "/close.svg"}
         alt="menu"

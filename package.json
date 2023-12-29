@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^4.29.1",
     "@floating-ui/react": "^0.26.4",
     "@headlessui/react": "^1.7.17",
     "@vercel/postgres": "^0.5.1",

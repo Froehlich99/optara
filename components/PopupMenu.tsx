@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import { UserButton } from "@clerk/nextjs";
+import TextUserButton from "./TextUserButton";
 
 type PopupMenuProps = {
   isOpen: boolean;
@@ -40,6 +41,7 @@ const PopupMenu = ({
             {link.label}
           </Link>
         ))}
+        <TextUserButton />
       </ul>
     )
   );
