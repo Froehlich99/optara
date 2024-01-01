@@ -19,7 +19,13 @@ const Navbar = () => {
     >
       <div className="flex flex-row items-center min-w-0 z-20">
         <Link href={"/"}>
-          <Image src={"/cb-logo.svg"} alt="logo" width={50} height={20}></Image>
+          <Image
+            className="p-0"
+            src={"/cb-logo.svg"}
+            alt="logo"
+            width={60}
+            height={60}
+          ></Image>
         </Link>
         <div
           className="min-w-0 px-3 w-[28rem] md:px-10"
