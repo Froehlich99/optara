@@ -1,4 +1,13 @@
-const StockSchema = new mongoose.Schema(
+import mongoose, { Document } from "mongoose";
+
+interface IStock extends Document {
+  name: string;
+  symbol: string;
+  currentPrice: number;
+  historicData: Array<{ date: Date; price: number }>;
+}
+
+const StockSchema = new mongoose.Schema<IStock>(
   {
     name: { type: String, required: true },
     symbol: { type: String, required: true, unique: true },
@@ -14,3 +23,5 @@ const StockSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+export default mongoose.model<IStock>("Stock", StockSchema);

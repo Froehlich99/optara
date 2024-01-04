@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import ClientApplication from "./ClientApplication";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +21,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
-          <Navbar />
-          <main className="relative overflow-hidden">{children}</main>
+          <ClientApplication>
+            <Navbar />
+            <main className="relative overflow-hidden">{children}</main>
+          </ClientApplication>
         </body>
       </html>
     </ClerkProvider>

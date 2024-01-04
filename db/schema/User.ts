@@ -1,18 +1,18 @@
+import mongoose from "mongoose";
+
 export interface IUser extends Document {
+  clerkId: string;
   username: string;
-  email: string;
-  password: string;
   money: number;
   totalInvestment: number;
   portfolioValue: number;
   gainLoss: number;
 }
 
-export const UserSchema = new mongoose.Schema(
+const UserSchema = new mongoose.Schema<IUser>(
   {
+    clerkId: { type: String, required: true, unique: true },
     username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
     money: { type: Number, default: 25000, required: true },
     portfolioValue: { type: Number, default: 0 },
     totalInvestment: { type: Number, default: 0 },
@@ -25,3 +25,5 @@ export const UserSchema = new mongoose.Schema(
 UserSchema.methods.getGainLoss = function (this: IUser) {
   return this.portfolioValue - this.totalInvestment;
 };
+
+export default mongoose.model<IUser>("User", UserSchema);

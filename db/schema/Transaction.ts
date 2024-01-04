@@ -1,4 +1,14 @@
-const TransactionSchema = new mongoose.Schema(
+import mongoose, { Document } from "mongoose";
+
+interface ITransaction extends Document {
+  user: mongoose.Schema.Types.ObjectId;
+  stock: mongoose.Schema.Types.ObjectId;
+  quantity: number;
+  transactionPrice: number;
+  transactionType: "buy" | "sell";
+}
+
+const TransactionSchema = new mongoose.Schema<ITransaction>(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     stock: {
@@ -14,3 +24,5 @@ const TransactionSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+export default mongoose.model<ITransaction>("Transaction", TransactionSchema);
