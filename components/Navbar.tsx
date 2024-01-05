@@ -7,11 +7,11 @@ import { useFloating } from "@floating-ui/react";
 import SearchBar from "./SearchBar";
 import PopupMenu from "./PopupMenu";
 import { UserButton } from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
-  //TODO: Change to something less workaround-y
-  const showNavbar =
-    window.location.href === "http://localhost:3000/" ? false : true;
+  const pathname = usePathname();
+  const showNavbar = pathname !== "/";
   const [isOpen, setisOpen] = useState(false);
   const { refs, floatingStyles } = useFloating();
 
