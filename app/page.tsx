@@ -1,5 +1,10 @@
+import VideoComponent from "@/components/Video";
 import Image from "next/image";
 
 export default function Home() {
-  return <main>Main Page</main>;
+  return (
+    <main>
+      <VideoComponent />
+    </main>
+  );
 }
