@@ -24,15 +24,15 @@ const Navbar = () => {
         <div className="flex flex-row items-center min-w-0 z-20">
           <Link href={"/"}>
             <Image
-              className="p-0"
-              src={"/cb-logo.svg"}
+              className="p-0 m-0"
+              src={"/images/cb-cropped.svg"}
               alt="logo"
-              width={60}
-              height={60}
+              width={80}
+              height={80}
             ></Image>
           </Link>
           <div
-            className="min-w-0 px-3 w-[28rem] md:px-10"
+            className="min-w-0 px-3 w-[28rem] md:px-5"
             onClick={() => setisOpen(false)}
           >
             <SearchBar />
