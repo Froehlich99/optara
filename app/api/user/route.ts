@@ -4,21 +4,16 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: any, res: any) {
   await connectDB();
-
-  const { clerkId, username } = req.body;
+  const data = await req.json();
+  const { clerkId, username } = data;
 
   try {
     let user = await User.findOne({ clerkId });
-    console.log(user);
     if (!user) {
-      // Create a new user if it does not exist
-      user = new User({ clerkId: clerkId, username: username });
-      console.log(user);
+      await User.create({ clerkId, username });
     }
-
-    await user.save();
     return NextResponse.json({ message: "Woho 🎉" });
-  } catch (err) {
-    return NextResponse.json({ message: "Rip 💀" });
+  } catch (err: any) {
+    return NextResponse.json({ message: err.message });
   }
 }
