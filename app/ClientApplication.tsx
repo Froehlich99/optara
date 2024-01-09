@@ -11,7 +11,7 @@ const ClientApplication: React.FC<Props> = ({ children }) => {
   const { user } = useUser();
   useEffect(() => {
     if (user) {
-      fetch("/api/auth/createOrUpdate", {
+      fetch("/api/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
