@@ -21,11 +21,9 @@ const ClientApplication: React.FC<Props> = ({ children }) => {
         .then((response) => response.json())
         .then((data) => {
           // Handle post request success
-          console.log(data);
         })
         .catch((error) => {
           // Handle post request error
-          console.error("Error:", error);
         });
     }
   }, [user]);
