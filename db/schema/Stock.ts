@@ -1,6 +1,6 @@
-import mongoose, { Document } from "mongoose";
+import mongoose from "mongoose";
 
-interface IStock extends Document {
+export interface IStock extends Document {
   name: string;
   symbol: string;
   currentPrice: number;
@@ -24,4 +24,5 @@ const StockSchema = new mongoose.Schema<IStock>(
   }
 );
 
-export default mongoose.model<IStock>("Stock", StockSchema);
+export default mongoose.models.Stock ||
+  mongoose.model<IStock>("Stock", StockSchema);

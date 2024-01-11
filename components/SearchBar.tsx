@@ -1,17 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { debounce } from "lodash";
-import { useFloating } from "@floating-ui/react";
+import { useFloating, useInteractions } from "@floating-ui/react";
+import { FloatingFocusManager } from "@floating-ui/react";
 import { size } from "@floating-ui/dom";
 import { autoUpdate } from "@floating-ui/dom";
-import { getStocks } from "@/app/actions";
+import { useFocus, useDismiss } from "@floating-ui/react";
+import { getStock } from "@/app/actions";
 import SearchPopup from "./SearchPopup";
+import { AnimatePresence } from "framer-motion";
 
 const SearchBar = () => {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isPopupOpen, setisPopupOpen] = useState(false);
   const [stocks, setStocks] = useState([]);
-  const { refs } = useFloating({
+
+  const { refs, context } = useFloating({
+    open: isPopupOpen,
+    onOpenChange: setIsPopupOpen,
     middleware: [
       size({
         apply({ rects, elements }) {
@@ -24,6 +30,14 @@ const SearchBar = () => {
     whileElementsMounted: autoUpdate,
   });
 
+  const focus = useFocus(context);
+  const dismiss = useDismiss(context);
+
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    focus,
+    dismiss,
+  ]);
+
   const debouncedSearch = React.useCallback(
     debounce((query: string) => {
       searchStocks(query);
@@ -32,11 +46,17 @@ const SearchBar = () => {
   );
 
   const searchStocks = async (query: string) => {
+    if (query.trim().length === 0) {
+      setStocks([]);
+      return;
+    }
+
     try {
-      const data = await getStocks(query);
+      const data: any = await getStock(query);
       setStocks(data);
     } catch (error) {
-      console.error(error);
+      console.error(error); // Logs any error
+      setStocks([]);
     }
   };
 
@@ -71,12 +91,28 @@ const SearchBar = () => {
         id="default-search"
         className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white outline-none"
         ref={refs.setReference}
+        {...getReferenceProps()}
         placeholder="Search Stocks"
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onFocus={() => setisPopupOpen(true)}
-        onBlur={() => setisPopupOpen(false)}
+        onChange={(e) => {
+          setSearchQuery(e.target.value.trim());
+          setIsPopupOpen(true);
+        }}
       />
-      <SearchPopup isPopupOpen={isPopupOpen} refs={refs} stocks={stocks} />
+      <AnimatePresence>
+        {isPopupOpen && (
+          <FloatingFocusManager
+            context={context}
+            modal={false}
+            initialFocus={-1}
+          >
+            <SearchPopup
+              refs={refs}
+              floatingProps={{ ...getFloatingProps() }}
+              stocks={stocks}
+            />
+          </FloatingFocusManager>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
