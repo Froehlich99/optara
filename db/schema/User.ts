@@ -1,10 +1,5 @@
 import mongoose from "mongoose";
 
-interface PortfolioHistory {
-  date: Date;
-  value: number;
-}
-
 export interface IUser extends Document {
   clerkId: string;
   username: string;
@@ -12,7 +7,6 @@ export interface IUser extends Document {
   totalInvestment: number;
   portfolioValue: number;
   gainLoss: number;
-  portfolioHistory: PortfolioHistory[];
 }
 
 const UserSchema = new mongoose.Schema<IUser>(
@@ -22,12 +16,6 @@ const UserSchema = new mongoose.Schema<IUser>(
     money: { type: Number, default: 25000, required: true },
     portfolioValue: { type: Number, default: 0 },
     totalInvestment: { type: Number, default: 0 },
-    portfolioHistory: [
-      {
-        date: { type: Date },
-        value: { type: Number },
-      },
-    ],
   },
   {
     timestamps: true,

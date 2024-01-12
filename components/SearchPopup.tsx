@@ -35,7 +35,7 @@ const SearchPopup: React.FC<SearchPopupProps> = ({
       {stocks && stocks.length > 0 ? (
         stocks.map((stock: any, index: any) => (
           <Link
-            href={""}
+            href={`/stocks/${stock.ISIN}`}
             key={index}
             className="flex h-[4rem] bold-16 px-2 hover:bg-gray-300 text-start items-center"
           >

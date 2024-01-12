@@ -1,28 +1,20 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IStock extends Document {
-  name: string;
-  symbol: string;
-  currentPrice: number;
-  historicData: Array<{ date: Date; price: number }>;
+  WKN: number;
+  Company: string;
+  LSID: number;
+  ISIN: string;
+  Ticker: string;
 }
 
-const StockSchema = new mongoose.Schema<IStock>(
-  {
-    name: { type: String, required: true },
-    symbol: { type: String, required: true, unique: true },
-    currentPrice: { type: Number, required: true },
-    historicData: [
-      {
-        date: { type: Date, required: true },
-        price: { type: Number, required: true },
-      },
-    ],
-  },
-  {
-    timestamps: true,
-  }
-);
+const StockSchema = new Schema<IStock>({
+  WKN: { type: Number, required: true },
+  Company: { type: String, required: true },
+  LSID: { type: Number, required: true },
+  ISIN: { type: String, required: true },
+  Ticker: { type: String, required: true },
+});
 
 export default mongoose.models.Stock ||
   mongoose.model<IStock>("Stock", StockSchema);
