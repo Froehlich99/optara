@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import ImageWithFallback from "./ImageWithFallback";
+import fallbackImage from "@/public/images/stock-placeholder.svg";
 
 // Define the props for SearchPopup
 type SearchPopupProps = {
@@ -9,10 +11,6 @@ type SearchPopupProps = {
   };
   stocks: any;
   floatingProps: any;
-};
-
-const imageLoader = (src: string) => {
-  return `${process.env.LOGO_DB_URI}${src}/v2/light.min.svg`;
 };
 
 // SearchPopup component
@@ -43,12 +41,13 @@ const SearchPopup: React.FC<SearchPopupProps> = ({
           >
             <div className="relative w-full flex py-3 items-center">
               <div className="w-4/5 flex justify-start items-center gap-1">
-                <Image
+                <ImageWithFallback
+                  fallback={fallbackImage}
                   src={`https://assets.traderepublic.com/img/logos/${stock.ISIN}/v2/light.min.svg`}
                   alt=""
                   width={30}
                   height={30}
-                ></Image>
+                />
                 <div className="line-clamp-1">
                   <p>{stock.Company}</p>
                 </div>
