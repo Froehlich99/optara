@@ -24,7 +24,8 @@ const page = async () => {
             </h1>
             <p className="regular-14 text-green-50">2,70%</p>
           </div>
-          <Linechart />
+          {/* TODO: Add User Linechart Data */}
+          {/* <Linechart/> */}
         </div>
         <div className="relative flex flex-col py-5">
           <h1 className="bold-20">Investments</h1>

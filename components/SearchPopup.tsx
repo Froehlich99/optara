@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ImageWithFallback from "./ImageWithFallback";
 import fallbackImage from "@/public/images/stock-placeholder.svg";
+import { popularStocks } from "@/constants/popularStocks";
 
 // Define the props for SearchPopup
 type SearchPopupProps = {
@@ -21,13 +22,6 @@ const SearchPopup: React.FC<SearchPopupProps> = ({
   floatingProps,
   setIsPopupOpen,
 }) => {
-  const popularStocks = {
-    US0231351067: "Amazon.com Inc.",
-    DE000ZAL1111: "Zalando SE",
-    US30303M1027: "Meta Platforms Inc.",
-    US5949181045: "Microsoft",
-    US64110L1061: "Netflix Inc.",
-  };
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}

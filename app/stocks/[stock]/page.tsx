@@ -3,6 +3,9 @@ import { getStockByIsin } from "@/lib/getStockByIsin";
 import ImageWithFallback from "@/components/ImageWithFallback";
 import fallbackImage from "@/public/images/stock-placeholder.svg";
 import { IScrip, getStockPricing } from "@/lib/getStockPricing";
+import Button from "@/components/Button";
+import { popularStocks } from "@/constants/popularStocks";
+import Link from "next/link";
 
 const page = async ({ params }: { params: { stock: string } }) => {
   const data = await getStockByIsin(params.stock);
@@ -77,12 +80,70 @@ const page = async ({ params }: { params: { stock: string } }) => {
           </div>
           <Linechart data={chartData} />
         </div>
-        <div className="relative flex flex-col py-5">
-          <h1 className="bold-20">Investments</h1>
+        <div className="flex flex-col py-5 lg:w-1/4">
+          <h1 className="bold-20">Info</h1>
+          {stockDetails ? (
+            <>
+              <div className="regular-20 flex flex-col gap-2 pb-10">
+                <div className="inline-flex space-x-2">
+                  <p>Company:</p>
+                  <p>
+                    {stockDetails.Company ? stockDetails.Company : "No Data"}
+                  </p>
+                </div>
+                <div className="inline-flex space-x-2">
+                  <p>ISIN: </p>
+                  <p>{stockDetails.ISIN ? stockDetails.ISIN : "No Data"}</p>
+                </div>
+                <div className="inline-flex space-x-2">
+                  <p>Ticker: </p>
+                  <p>{stockDetails.Ticker ? stockDetails.Ticker : "No Data"}</p>
+                </div>
+                <div className="inline-flex space-x-2">
+                  <p>WKN: </p>
+                  <p>{stockDetails.WKN ? stockDetails.WKN : "No Data"}</p>
+                </div>
+              </div>
+              <div className="flex lg:flex-col lg:gap-5 justify-around w-full">
+                <div className="flex lg:w-full justify-center w-2/5">
+                  <Button type="button" title="Buy" variant="btn_dark_green" />
+                </div>
+                <div className="flex lg:w-full justify-center w-2/5">
+                  <Button type="button" title="Sell" variant="btn_dark_green" />
+                </div>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <div className="relative flex flex-col lg:px-32">
         <h1 className="bold-32">Discover</h1>
+        {Object.entries(popularStocks).map(
+          ([ISIN, companyName], index: any) => (
+            <Link
+              href={`/stocks/${ISIN}`}
+              key={index}
+              className="flex h-[4rem] bold-16 hover:bg-gray-300 text-start items-center"
+            >
+              <div className="relative w-full flex py-3 items-center">
+                <div className="w-4/5 flex justify-start items-center gap-1">
+                  <ImageWithFallback
+                    fallback={fallbackImage}
+                    src={`https://assets.traderepublic.com/img/logos/${ISIN}/v2/light.min.svg`}
+                    alt=""
+                    width={30}
+                    height={30}
+                  />
+                  <div className="line-clamp-1">
+                    <p>{companyName}</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          )
+        )}
       </div>
     </div>
   );

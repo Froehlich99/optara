@@ -1,5 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import crosshair from "chartjs-plugin-crosshair";
+import annotationPlugin from "chartjs-plugin-annotation";
 
 import {
   Chart as ChartJS,
@@ -24,7 +26,9 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  crosshair,
+  annotationPlugin
 );
 
 export const options: OptionsType = {
@@ -72,26 +76,36 @@ const labels = Array.from(
   { length: numOfDataPoints },
   (_, i) => `Label ${i + 1}`
 );
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "",
-      data: labels.map(() => faker.number.int({ min: -1000, max: 1000 })),
-      get borderColor() {
-        // Check if last number in data is positive or negative
-        const lastNumber = this.data[this.data.length - 1];
-        return lastNumber >= 0 ? "green" : "red";
-      },
-      pointRadius: 0,
-      pointHoverRadius: 5,
-      tension: 0.05,
-    },
-  ],
-};
-const Linechart = ({ data }: any) => {
-  if (!data) return <p>No data available.</p>;
-  return <Line options={options} data={data} />;
-};
+const Linechart = ({ data: lineData }: any) => {
+  const [lineOptions, setLineOptions] = useState(options);
 
+  useEffect(() => {
+    if (
+      lineData &&
+      lineData.datasets.length > 0 &&
+      lineData.datasets[0].data.length > 0
+    ) {
+      setLineOptions((prevState) => ({
+        ...prevState,
+        plugins: {
+          ...prevState.plugins,
+          annotation: {
+            annotations: {
+              valueLine: {
+                type: "line",
+                yMin: lineData.datasets[0].data[0],
+                yMax: lineData.datasets[0].data[0],
+                borderColor: "rgb(211,211,211)",
+                borderWidth: 2,
+                borderDash: [5, 5],
+              },
+            },
+          },
+        },
+      }));
+    }
+  }, [lineData]);
+
+  return <Line options={lineOptions} data={lineData} />;
+};
 export default Linechart;

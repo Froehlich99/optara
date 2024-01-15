@@ -14,6 +14,8 @@
     "@headlessui/react": "^1.7.17",
     "@vercel/postgres": "^0.5.1",
     "chart.js": "^4.4.1",
+    "chartjs-plugin-annotation": "^3.0.1",
+    "chartjs-plugin-crosshair": "^2.0.0",
     "framer-motion": "^10.16.16",
     "lodash": "^4.17.21",
     "mongodb": "^6.3.0",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^8.3.1",
+    "@types/chartjs-plugin-crosshair": "^1.1.4",
     "@types/lodash": "^4.14.202",
     "@types/node": "^20",
     "@types/react": "^18",
