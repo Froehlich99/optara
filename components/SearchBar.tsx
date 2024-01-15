@@ -53,7 +53,7 @@ const SearchBar = () => {
 
     try {
       const data: any = await getStock(query);
-      setStocks(data);
+      setStocks(data.length > 0 ? data : []);
     } catch (error) {
       console.error(error); // Logs any error
       setStocks([]);
@@ -61,9 +61,7 @@ const SearchBar = () => {
   };
 
   useEffect(() => {
-    if (searchQuery) {
-      debouncedSearch(searchQuery);
-    }
+    debouncedSearch(searchQuery);
   }, [searchQuery, debouncedSearch]);
 
   return (
@@ -104,11 +102,13 @@ const SearchBar = () => {
             context={context}
             modal={false}
             initialFocus={-1}
+            returnFocus={false}
           >
             <SearchPopup
               refs={refs}
               floatingProps={{ ...getFloatingProps() }}
               stocks={stocks}
+              setIsPopupOpen={setIsPopupOpen}
             />
           </FloatingFocusManager>
         )}

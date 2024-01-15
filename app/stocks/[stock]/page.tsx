@@ -17,6 +17,23 @@ const page = async ({ params }: { params: { stock: string } }) => {
   if (currentValue && previousValue) {
     change = ((currentValue - previousValue) / previousValue) * 100;
   }
+  const chartData = priceData
+    ? {
+        labels: priceData.series.intraday.data.map((value) =>
+          new Date(value[0]).toLocaleTimeString()
+        ),
+        datasets: [
+          {
+            label: "",
+            data: priceData.series.intraday.data.map((value) => value[1]),
+            borderColor: change ? (change >= 0 ? "green" : "red") : "grey",
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            tension: 0.05,
+          },
+        ],
+      }
+    : null;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("de-DE", {
@@ -58,7 +75,7 @@ const page = async ({ params }: { params: { stock: string } }) => {
                 : "No Data"}
             </p>
           </div>
-          <Linechart />
+          <Linechart data={chartData} />
         </div>
         <div className="relative flex flex-col py-5">
           <h1 className="bold-20">Investments</h1>

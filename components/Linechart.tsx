@@ -89,7 +89,8 @@ export const data = {
     },
   ],
 };
-const Linechart = () => {
+const Linechart = ({ data }: any) => {
+  if (!data) return <p>No data available.</p>;
   return <Line options={options} data={data} />;
 };
 
