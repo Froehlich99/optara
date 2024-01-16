@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const DATABASE_URL = process.env.MONGO_URI;
+const DATABASE_URL = process.env.MONGODB_URI;
 
 if (!DATABASE_URL) {
   throw new Error(
@@ -26,6 +26,7 @@ async function connectDB() {
 
     if (DATABASE_URL) {
       cached.promise = mongoose.connect(DATABASE_URL, opts).then((mongoose) => {
+        console.log("connected");
         return mongoose;
       });
     } else {
