@@ -5,7 +5,7 @@ import { IUser } from "@/db/schema/User";
 
 const page = async () => {
   const { userId }: { userId: string | null } = auth();
-  const user: IUser | null = await getUserDetails(userId ? userId : "");
+  // const user: IUser | null = await getUserDetails(userId ? userId : "");
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("de-DE", {
       style: "currency",
@@ -19,7 +19,7 @@ const page = async () => {
           <div className="pb-10">
             <h1 className="bold-32">Portfolio</h1>
             <h1 className="bold-20">
-              {user ? formatCurrency(user.portfolioValue) : "No Data"}
+              {/* {user ? formatCurrency(user.portfolioValue) : "No Data"} */}
             </h1>
             <p className="regular-14 text-green-50">2,70%</p>
           </div>
