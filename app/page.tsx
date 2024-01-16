@@ -1,10 +1,9 @@
-import VideoComponent from "@/components/Video";
-import Image from "next/image";
+import LandingComponent from "@/components/Landing";
 
 export default function Home() {
   return (
     <main>
-      <VideoComponent />
+      <LandingComponent />
     </main>
   );
 }
