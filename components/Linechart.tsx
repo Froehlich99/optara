@@ -14,7 +14,6 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { faker } from "@faker-js/faker";
 
 type LineProps = React.ComponentProps<typeof Line>;
 type OptionsType = LineProps["options"];
