@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main>
@@ -10,9 +12,11 @@ export default function Home() {
           />
         </div>
         <div className="flex item-center">
-          <button className="bg-white rounded-full px-4 py-2 ml-4">
-            Login
-          </button>
+          <Link href="/portfolio" passHref>
+            <button className="bg-white rounded-full px-4 py-2 ml-4">
+              Login
+            </button>
+          </Link>
         </div>
       </div>
 
