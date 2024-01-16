@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
 const DATABASE_URL = process.env.MONGO_URI;
+console.log("This is Run");
+console.log(DATABASE_URL);
 
 if (!DATABASE_URL) {
   throw new Error(
