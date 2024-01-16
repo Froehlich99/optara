@@ -1,9 +1,9 @@
 "use client";
 import Linechart from "@/components/Linechart";
-import { getStockByIsin } from "@/lib/getStockByIsin";
+import { getStockByIsin } from "@/app/lib/getStockByIsin";
 import ImageWithFallback from "@/components/ImageWithFallback";
 import fallbackImage from "@/public/images/stock-placeholder.svg";
-import { IScrip, getStockPricing } from "@/lib/getStockPricing";
+import { IScrip, getStockPricing } from "@/app/lib/getStockPricing";
 import Button from "@/components/Button";
 import { popularStocks } from "@/constants/popularStocks";
 import Link from "next/link";

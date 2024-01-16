@@ -1,5 +1,5 @@
 import React from "react";
-import { getUserDetails } from "@/lib/getUserDetails";
+import { getUserDetails } from "@/app/lib/getUserDetails";
 import { auth } from "@clerk/nextjs";
 import User, { IUser } from "@/db/schema/User";
 

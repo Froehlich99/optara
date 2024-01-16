@@ -1,6 +1,6 @@
 "use server";
 
-import { getStocks } from "@/lib/getStocks";
+import { getStocks } from "@/app/lib/getStocks";
 
 export async function getStock(query: string) {
   const stocks = await getStocks(query);

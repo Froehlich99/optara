@@ -1,6 +1,6 @@
 import StockComponent from "./StockComponent";
-import { getStockByIsin } from "@/lib/getStockByIsin";
-import { IScrip, getStockPricing } from "@/lib/getStockPricing";
+import { getStockByIsin } from "@/app/lib/getStockByIsin";
+import { IScrip, getStockPricing } from "@/app/lib/getStockPricing";
 
 interface IStockDetails {
   _id: string; // Assuming _id is meant to be a string. Adjust accordingly.
