@@ -1,6 +1,8 @@
+import connectDB from "@/db/connectDB";
 import Stock, { IStock } from "@/db/schema/Stock";
 
 export async function getStocks(query: string): Promise<IStock[] | null> {
+  await connectDB();
   try {
     const pipeline = [
       {

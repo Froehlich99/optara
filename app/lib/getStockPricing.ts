@@ -1,3 +1,5 @@
+import connectDB from "@/db/connectDB";
+
 export interface IScrip {
   info: {
     isin: string;
@@ -42,6 +44,7 @@ export interface IScrip {
 }
 
 export async function getStockPricing(lsid: string) {
+  await connectDB();
   const response = await fetch(
     `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${lsid}`
   );
