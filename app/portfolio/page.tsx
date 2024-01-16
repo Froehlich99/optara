@@ -1,4 +1,3 @@
-import Linechart from "@/components/Linechart";
 import React from "react";
 import { getUserDetails } from "@/lib/getUserDetails";
 import { auth } from "@clerk/nextjs";
