@@ -27,10 +27,12 @@ async function connectDB() {
     };
 
     if (DATABASE_URL) {
-      cached.promise = mongoose.connect(DATABASE_URL, opts).then((mongoose) => {
-        console.log("connected");
-        return mongoose;
-      });
+      cached.promise = await mongoose
+        .connect(DATABASE_URL, opts)
+        .then((mongoose) => {
+          console.log("connected");
+          return mongoose;
+        });
     } else {
       console.error("DATABASE_URL must be defined");
     }
