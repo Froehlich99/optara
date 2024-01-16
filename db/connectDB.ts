@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const DATABASE_URL = process.env.MONGO_URI;
+const DATABASE_URL = process.env.MONGODB_URI;
 console.log("This is Run");
 console.log(DATABASE_URL);
 
