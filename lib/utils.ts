@@ -89,18 +89,14 @@ export const updateChartData = (
 ): ChartData<"line", number[], string> | null => {
   if (!graphData) return null;
 
-  const formatLabel = (value: number[]) =>
-    selectedButton === "1 D."
-      ? // hardcoding locale, should be changed with getTimezoneOffset() or sth, client can easily manipulate this information
-        new Date(value[0]).toLocaleTimeString("de-DE", {
-          timeZone: "Europe/Berlin",
-        })
-      : new Date(value[0]).toLocaleDateString("de-DE", {
-          timeZone: "Europe/Berlin",
-        });
-
+  const formatLabel = (value: number[]) => {
+    //this is neccessary because the API returns german time, but specifies the wrong time zone
+    const date = new Date(value[0] - 60 * 60 * 1000); // subtract 1 hour from the timestamp
+    return selectedButton === "1 D."
+      ? date.toLocaleTimeString()
+      : date.toLocaleDateString();
+  };
   const borderColor = change ? (change >= 0 ? "green" : "red") : "grey";
-
   return {
     labels: graphData.map((value) => formatLabel(value)),
     datasets: [
