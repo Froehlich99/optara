@@ -15,7 +15,7 @@ export async function getStock(query: string) {
 }
 
 export async function getUser() {
-  connectDB();
+  await connectDB();
   const { userId }: { userId: string | null } = auth();
   const userData = await User.findOne({ clerkId: userId });
   return userData;
