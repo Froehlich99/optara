@@ -41,7 +41,7 @@ const SearchBar = () => {
   const debouncedSearch = React.useCallback(
     debounce((query: string) => {
       searchStocks(query);
-    }, 150),
+    }, 300),
     []
   );
 
