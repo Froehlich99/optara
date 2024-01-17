@@ -1,40 +1,36 @@
-import mongoose from "mongoose";
+import mongoose, { ConnectOptions, Mongoose } from "mongoose";
 
-const DATABASE_URL = process.env.MONGODB_URI;
-
-if (!DATABASE_URL) {
-  throw new Error(
-    "Please define the MONGO_URI environment variable inside .env.local"
-  );
+if (!process.env.MONGODB_URI) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
 }
 
-let cached = (global as any).mongoose;
+const uri = process.env.MONGODB_URI;
 
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null };
-}
+const options = {};
 
-async function connectDB() {
-  if (cached.conn) {
-    return cached.conn;
+let clientPromise: Promise<Mongoose>;
+
+if (process.env.NODE_ENV === "development") {
+  // In development mode, use a global variable so that the value
+  // is preserved across module reloads caused by HMR (Hot Module Replacement).
+  let globalMongo = global as typeof globalThis & {
+    isConnected?: Promise<Mongoose>;
+  };
+
+  if (!globalMongo.isConnected) {
+    globalMongo.isConnected = mongoose.connect(uri, options as ConnectOptions);
   }
-
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-    };
-
-    if (DATABASE_URL) {
-      cached.promise = mongoose.connect(DATABASE_URL, opts).then((mongoose) => {
-        console.log("connected");
-        return mongoose;
-      });
-    } else {
-      console.error("DATABASE_URL must be defined");
-    }
+  clientPromise = globalMongo.isConnected;
+} else {
+  // In production mode, it's best to not use a global variable.
+  try {
+    clientPromise = mongoose.connect(uri, options as ConnectOptions);
+  } catch (err) {
+    console.log(err);
   }
-  cached.conn = await cached.promise;
-  return cached.conn;
+  clientPromise = mongoose.connect(uri, options as ConnectOptions);
 }
 
-export default connectDB;
+// Export a module-scoped MongoClient promise. By doing this in a
+// separate module, the client can be shared across functions.
+export default clientPromise;

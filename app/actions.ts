@@ -1,12 +1,12 @@
 "use server";
 
-import connectDB from "@/db/connectDB";
+import clientPromise from "@/db/connectDB";
 import Stock, { IStock } from "@/db/schema/Stock";
 import User from "@/db/schema/User";
 import { auth } from "@clerk/nextjs";
 
 export async function getStocks(query: string): Promise<IStock[] | null> {
-  await connectDB();
+  await clientPromise;
   try {
     const pipeline = [
       {
@@ -36,14 +36,14 @@ export async function getStocks(query: string): Promise<IStock[] | null> {
 }
 
 export async function getUser() {
-  await connectDB();
+  await clientPromise;
   const { userId }: { userId: string | null } = auth();
   const userData = await User.findOne({ clerkId: userId });
   return userData;
 }
 
 export async function getStockByIsin(isin: string): Promise<IStock | null> {
-  await connectDB();
+  await clientPromise;
   try {
     const stock = await Stock.findOne({ ISIN: isin });
     return stock.toObject();
@@ -53,7 +53,7 @@ export async function getStockByIsin(isin: string): Promise<IStock | null> {
 }
 
 export async function getStockPricing(lsid: string) {
-  await connectDB();
+  await clientPromise;
   const response = await fetch(
     `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${lsid}`
   );
