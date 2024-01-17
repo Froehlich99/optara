@@ -1,15 +1,13 @@
 "use client";
 import Linechart from "@/components/Linechart";
-import { getStockByIsin } from "@/lib/getStockByIsin";
 import ImageWithFallback from "@/components/ImageWithFallback";
 import fallbackImage from "@/public/images/stock-placeholder.svg";
-import { IScrip, getStockPricing } from "@/lib/getStockPricing";
+import { IScrip } from "@/constants/iscrip";
 import Button from "@/components/Button";
 import { popularStocks } from "@/constants/popularStocks";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ChartData, Point } from "chart.js";
-import { reduce } from "lodash";
 
 const StockComponent: React.FC<{
   stockDetails: any;

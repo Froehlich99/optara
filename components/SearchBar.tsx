@@ -6,7 +6,7 @@ import { FloatingFocusManager } from "@floating-ui/react";
 import { size } from "@floating-ui/dom";
 import { autoUpdate } from "@floating-ui/dom";
 import { useFocus, useDismiss } from "@floating-ui/react";
-import { getStock } from "@/app/actions";
+import { getStocks } from "@/app/actions";
 import SearchPopup from "./SearchPopup";
 import { AnimatePresence } from "framer-motion";
 
@@ -52,7 +52,7 @@ const SearchBar = () => {
     }
 
     try {
-      const data: any = await getStock(query);
+      const data: any = await getStocks(query);
       setStocks(data.length > 0 ? data : []);
     } catch (error) {
       console.error(error); // Logs any error

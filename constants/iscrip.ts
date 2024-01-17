@@ -40,17 +40,3 @@ export interface IScrip {
     };
   };
 }
-
-export async function getStockPricing(lsid: string) {
-  const response = await fetch(
-    `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${lsid}`
-  );
-
-  if (!response.ok) {
-    console.error("HTTP error", response.status);
-    return null;
-  } else {
-    const priceData = await response.json();
-    return priceData;
-  }
-}
