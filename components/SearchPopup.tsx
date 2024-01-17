@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ImageWithFallback from "./ImageWithFallback";
 import fallbackImage from "@/public/images/stock-placeholder.svg";
-import { popularStocks } from "@/constants/popularStocks";
+import { popularStocks } from "@/constants/const";
 
 // Define the props for SearchPopup
 type SearchPopupProps = {

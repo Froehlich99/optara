@@ -1,3 +1,12 @@
+export interface IStockDetails {
+  _id: string;
+  Company: string;
+  LSID: number;
+  ISIN: string;
+  Ticker: string;
+  // Extend with additional properties
+}
+
 export interface IScrip {
   info: {
     isin: string;

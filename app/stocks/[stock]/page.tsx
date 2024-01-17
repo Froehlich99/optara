@@ -1,6 +1,6 @@
 import { getStockByIsin } from "@/app/actions";
 import StockComponent from "./StockComponent";
-import { IScrip } from "@/constants/iscrip";
+import { IScrip } from "@/constants/types";
 import { getStockPricing } from "@/app/actions";
 
 interface IStockDetails {

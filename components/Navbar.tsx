@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { NAV_LINKS } from "@/constants";
+import { NAV_LINKS } from "@/constants/const";
 import Image from "next/image";
 import Link from "next/link";
 import { useFloating } from "@floating-ui/react";

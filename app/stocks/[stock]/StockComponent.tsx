@@ -2,12 +2,13 @@
 import Linechart from "@/components/Linechart";
 import ImageWithFallback from "@/components/ImageWithFallback";
 import fallbackImage from "@/public/images/stock-placeholder.svg";
-import { IScrip } from "@/constants/iscrip";
-import Button from "@/components/Button";
-import { popularStocks } from "@/constants/popularStocks";
-import Link from "next/link";
+import { IScrip } from "@/constants/types";
 import { useEffect, useState } from "react";
-import { ChartData, Point } from "chart.js";
+import { ChartData } from "chart.js";
+import { filterGraphData, formatCurrency, updateChartData } from "@/lib/utils";
+import { timeFrame } from "@/constants/const";
+import { StockInfo } from "@/components/StockDetails";
+import StockDiscover from "@/components/StockDiscover";
 
 const StockComponent: React.FC<{
   stockDetails: any;
@@ -22,7 +23,7 @@ const StockComponent: React.FC<{
 
   const previousValue = priceData?.info.plotlines[0].value;
 
-  let change: any = null;
+  let change: number | null = null;
 
   if (currentValue && previousValue) {
     change = ((currentValue - previousValue) / previousValue) * 100;
@@ -34,121 +35,34 @@ const StockComponent: React.FC<{
     number[],
     string
   > | null>(null);
-  useEffect(() => {
-    if (graphData) {
-      if (selectedButton === "1 D.") {
-        // format labels as times
-        setChartData({
-          labels: graphData.map((value) =>
-            new Date(value[0]).toLocaleTimeString()
-          ),
-          datasets: [
-            {
-              label: "",
-              data: graphData.map((value) => value[1]),
-              borderColor: change ? (change >= 0 ? "green" : "red") : "grey",
-              pointRadius: 0,
-              pointHoverRadius: 5,
-              tension: 0.05,
-            },
-          ],
-        });
-      } else {
-        // format labels as dates
-        setChartData({
-          labels: graphData.map((value) =>
-            new Date(value[0]).toLocaleDateString()
-          ),
-          datasets: [
-            {
-              label: "",
-              data: graphData.map((value) => value[1]),
-              borderColor: change ? (change >= 0 ? "green" : "red") : "grey",
-              pointRadius: 0,
-              pointHoverRadius: 5,
-              tension: 0.05,
-            },
-          ],
-        });
-      }
-    }
-  }, [graphData]);
 
-  const timeFrames = ["1 D.", "1 M.", "6 M.", "YTD", "1 Y.", "5 Y.", "Max."];
+  useEffect(() => {
+    // This effect is responsible for setting `graphData` when `priceData` updates
+    if (priceData) {
+      // Use a helper function to decide which part of `priceData` is relevant
+      // for the initial `graphData` based on the initial `selectedButton` value.
+      const initialGraphData = filterGraphData(
+        selectedButton,
+        priceData,
+        Date.now()
+      );
+
+      // Set the initial `graphData`
+      setGraphData(initialGraphData);
+    }
+  }, [priceData]);
+
+  useEffect(() => {
+    const chart = updateChartData(selectedButton, graphData, change);
+    setChartData(chart);
+  }, [selectedButton, graphData, change]);
+
+  const timeFrames = timeFrame;
   const handleButtonClick = (newButton: string) => {
     setSelectedButton(newButton);
-
     const dateNow = Date.now();
-    let newData;
-
-    switch (newButton) {
-      case "1 D.":
-        newData = priceData?.series.intraday.data; // for '1 D.', use raw intradayData
-        break;
-      case "1 M.":
-        newData = priceData?.series.history.data.filter(
-          ([time, value]) => dateNow - time <= 1000 * 60 * 60 * 24 * 30
-        );
-        break;
-      case "6 M.":
-        newData = priceData?.series.history.data.filter(
-          ([time, value]) => dateNow - time <= 1000 * 60 * 60 * 24 * 30 * 6
-        );
-        break;
-      case "YTD":
-        // filter out data from the start of the current year
-        const startOfCurrentYear = new Date(
-          new Date().getFullYear(),
-          0,
-          1
-        ).getTime();
-        newData = priceData?.series.history.data.filter(
-          ([time, value]) => time >= startOfCurrentYear
-        );
-        break;
-      case "1 Y.":
-        // filter out data that is one year old
-        newData = priceData?.series.history.data.filter(
-          ([time, value]) => dateNow - time <= 1000 * 60 * 60 * 24 * 365
-        );
-        break;
-      case "5 Y.":
-        // filter out data that is five years old
-        const fiveYearData = priceData?.series.history.data.filter(
-          ([time, value]) => dateNow - time <= 1000 * 60 * 60 * 24 * 365 * 5
-        );
-
-        if (fiveYearData) {
-          const startDate = fiveYearData[0][0];
-
-          newData = fiveYearData.filter(([time]) => {
-            const daysPassed = Math.floor(
-              (time - startDate) / (1000 * 60 * 60 * 24)
-            );
-
-            // include tevery third day
-            return daysPassed % 3 === 0;
-          });
-        }
-        break;
-      case "Max.":
-        // include every 10th day
-        newData = priceData?.series.history.data?.filter(
-          (_, index) => index % 10 === 0
-        );
-        break;
-      default:
-        break;
-    }
-
+    const newData = filterGraphData(newButton, priceData, dateNow);
     setGraphData(newData);
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("de-DE", {
-      style: "currency",
-      currency: "EUR",
-    }).format(amount);
   };
 
   return (
@@ -190,7 +104,6 @@ const StockComponent: React.FC<{
             {timeFrames.map((timeFrame) => (
               <button
                 key={timeFrame}
-                //TODO: all Buttons are Highlighted
                 className={`${
                   selectedButton === timeFrame ? "bg-slate-200" : ""
                 } rounded-md p-1.5`}
@@ -203,65 +116,11 @@ const StockComponent: React.FC<{
           {chartData && <Linechart data={chartData} />}
         </div>
         <div className="flex flex-col py-5 lg:w-1/4">
-          <h1 className="bold-20">Info</h1>
-          {stockDetails ? (
-            <>
-              <div className="regular-20 flex flex-col gap-2 pb-10">
-                <div className="inline-flex space-x-2">
-                  <p>Company:</p>
-                  <p>
-                    {stockDetails.Company ? stockDetails.Company : "No Data"}
-                  </p>
-                </div>
-                <div className="inline-flex space-x-2">
-                  <p>ISIN: </p>
-                  <p>{stockDetails.ISIN ? stockDetails.ISIN : "No Data"}</p>
-                </div>
-                <div className="inline-flex space-x-2">
-                  <p>Ticker: </p>
-                  <p>{stockDetails.Ticker ? stockDetails.Ticker : "No Data"}</p>
-                </div>
-              </div>
-              <div className="flex lg:flex-col lg:gap-5 justify-around w-full">
-                <div className="flex lg:w-full justify-center w-2/5">
-                  <Button type="button" title="Buy" variant="btn_dark_green" />
-                </div>
-                <div className="flex lg:w-full justify-center w-2/5">
-                  <Button type="button" title="Sell" variant="btn_dark_green" />
-                </div>
-              </div>
-            </>
-          ) : (
-            ""
-          )}
+          <StockInfo stockDetails={stockDetails} />
         </div>
       </div>
-      <div className="relative flex flex-col lg:px-32">
-        <h1 className="bold-32">Discover</h1>
-        {Object.entries(popularStocks).map(
-          ([ISIN, companyName], index: any) => (
-            <Link
-              href={`/stocks/${ISIN}`}
-              key={index}
-              className="flex h-[4rem] bold-16 hover:bg-gray-300 text-start items-center"
-            >
-              <div className="relative w-full flex py-3 items-center">
-                <div className="w-4/5 flex justify-start items-center gap-1">
-                  <ImageWithFallback
-                    fallback={fallbackImage}
-                    src={`https://assets.traderepublic.com/img/logos/${ISIN}/v2/light.min.svg`}
-                    alt=""
-                    width={30}
-                    height={30}
-                  />
-                  <div className="line-clamp-1">
-                    <p>{companyName}</p>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          )
-        )}
+      <div className="relative flex flex-col lg:px-32 pb-10">
+        <StockDiscover />
       </div>
     </div>
   );
