@@ -1,11 +1,7 @@
-import React from "react";
-import { getUserDetails } from "@/app/lib/getUserDetails";
-import { auth } from "@clerk/nextjs";
-import User, { IUser } from "@/db/schema/User";
+import { getUser } from "../actions";
 
 const page = async () => {
-  const { userId }: { userId: string | null } = auth();
-  const user: IUser | null = await User.findOne({ clerkId: userId });
+  const user = await getUser();
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("de-DE", {
       style: "currency",

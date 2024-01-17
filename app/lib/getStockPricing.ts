@@ -1,3 +1,4 @@
+"use server";
 import connectDB from "@/db/connectDB";
 
 export interface IScrip {

@@ -1,3 +1,4 @@
+"use server";
 import connectDB from "@/db/connectDB";
 import Stock, { IStock } from "@/db/schema/Stock";
 

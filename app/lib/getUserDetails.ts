@@ -1,3 +1,4 @@
+"use server";
 import connectDB from "@/db/connectDB";
 import User, { IUser } from "@/db/schema/User";
 
