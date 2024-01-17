@@ -105,3 +105,19 @@ export const updateChartData = (
     ],
   };
 };
+
+export const calculateChange = (
+  newData: number[][] | undefined
+): number | null => {
+  if (!newData || newData.length === 0) return null;
+
+  // assumption: newData is ordered by time in ascending order (most recent data at the end of the array)
+  const currentValue = newData[newData.length - 1][1];
+  const previousValue = newData[0][1];
+
+  let change: number | null = null;
+  if (currentValue && previousValue) {
+    change = ((currentValue - previousValue) / previousValue) * 100;
+  }
+  return change;
+};

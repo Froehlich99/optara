@@ -5,7 +5,12 @@ import fallbackImage from "@/public/images/stock-placeholder.svg";
 import { IScrip } from "@/constants/types";
 import { useEffect, useState } from "react";
 import { ChartData } from "chart.js";
-import { filterGraphData, formatCurrency, updateChartData } from "@/lib/utils";
+import {
+  calculateChange,
+  filterGraphData,
+  formatCurrency,
+  updateChartData,
+} from "@/lib/utils";
 import { timeFrame } from "@/constants/const";
 import { StockInfo } from "@/components/StockDetails";
 import StockDiscover from "@/components/StockDiscover";
@@ -15,6 +20,13 @@ const StockComponent: React.FC<{
   priceData: IScrip | null;
 }> = ({ stockDetails, priceData }) => {
   const [selectedButton, setSelectedButton] = useState("1 D.");
+  const [change, setChange] = useState<number | null>(null);
+  const [graphData, setGraphData] = useState(priceData?.series.history.data);
+  const [chartData, setChartData] = useState<ChartData<
+    "line",
+    number[],
+    string
+  > | null>(null);
 
   const currentValue =
     priceData?.info.isin == null
@@ -23,24 +35,17 @@ const StockComponent: React.FC<{
 
   const previousValue = priceData?.info.plotlines[0].value;
 
-  let change: number | null = null;
-
-  if (currentValue && previousValue) {
-    change = ((currentValue - previousValue) / previousValue) * 100;
-  }
-
-  const [graphData, setGraphData] = useState(priceData?.series.history.data);
-  const [chartData, setChartData] = useState<ChartData<
-    "line",
-    number[],
-    string
-  > | null>(null);
+  useEffect(() => {
+    if (currentValue && previousValue) {
+      const calculatedChange =
+        ((currentValue - previousValue) / previousValue) * 100;
+      setChange(calculatedChange);
+    }
+  }, []); // Empty dependency array - runs only once
 
   useEffect(() => {
     // This effect is responsible for setting `graphData` when `priceData` updates
     if (priceData) {
-      // Use a helper function to decide which part of `priceData` is relevant
-      // for the initial `graphData` based on the initial `selectedButton` value.
       const initialGraphData = filterGraphData(
         selectedButton,
         priceData,
@@ -50,18 +55,20 @@ const StockComponent: React.FC<{
       // Set the initial `graphData`
       setGraphData(initialGraphData);
     }
-  }, [priceData]);
+  }, [priceData, selectedButton]);
 
   useEffect(() => {
     const chart = updateChartData(selectedButton, graphData, change);
     setChartData(chart);
-  }, [selectedButton, graphData, change]);
+  }, [selectedButton, graphData]);
 
   const timeFrames = timeFrame;
   const handleButtonClick = (newButton: string) => {
     setSelectedButton(newButton);
     const dateNow = Date.now();
     const newData = filterGraphData(newButton, priceData, dateNow);
+    const newChange = calculateChange(newData);
+    setChange(newChange);
     setGraphData(newData);
   };
 
