@@ -32,6 +32,11 @@ export default function Home() {
           Your browser does not support the video tag.
         </video>
       </div>
+      <div className="absolute top-3/4 left-0 transform -translate-y-1/2 bg-transparent p-6 md:w-1/4">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4">
+          Wo Ihr Vermögen in sicheren Händen ist
+        </h1>
+      </div>
     </main>
   );
 }
