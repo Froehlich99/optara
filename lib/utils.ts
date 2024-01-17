@@ -8,6 +8,11 @@ export const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
+function convertToLocalTime(time: number) {
+  const date = new Date(time);
+  return date.toLocaleDateString();
+}
+
 // The logic for filtering data based on the selected time frame
 export function filterGraphData(
   newButton: string,
@@ -86,8 +91,13 @@ export const updateChartData = (
 
   const formatLabel = (value: number[]) =>
     selectedButton === "1 D."
-      ? new Date(value[0]).toLocaleTimeString()
-      : new Date(value[0]).toLocaleDateString();
+      ? // hardcoding locale, should be changed with getTimezoneOffset() or sth, client can easily manipulate this information
+        new Date(value[0]).toLocaleTimeString("de-DE", {
+          timeZone: "Europe/Berlin",
+        })
+      : new Date(value[0]).toLocaleDateString("de-DE", {
+          timeZone: "Europe/Berlin",
+        });
 
   const borderColor = change ? (change >= 0 ? "green" : "red") : "grey";
 

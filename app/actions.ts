@@ -46,16 +46,26 @@ export async function getStockByIsin(isin: string): Promise<IStock | null> {
   await clientPromise;
   try {
     const stock = await Stock.findOne({ ISIN: isin });
-    return stock.toObject();
+    if (stock) {
+      const plainObject = stock.toObject();
+      plainObject._id = plainObject._id.toString();
+      return plainObject;
+    } else {
+      return null;
+    }
   } catch (err) {
     return null;
   }
 }
 
-export async function getStockPricing(lsid: string) {
+export async function getStockPricing(lsid: string | undefined) {
   await clientPromise;
+  if (!lsid) {
+    return;
+  }
   const response = await fetch(
-    `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${lsid}`
+    `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${lsid}`,
+    { cache: "no-cache" }
   );
 
   if (!response.ok) {
