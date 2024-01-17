@@ -1,9 +1,9 @@
-import connectDB from "@/db/connectDB";
+import clientPromise from "@/db/connectDB";
 import User from "@/db/schema/User";
 import { NextResponse } from "next/server";
 
 export async function POST(req: any, res: any) {
-  await connectDB();
+  await clientPromise;
   const data = await req.json();
   const { clerkId, username } = data;
 
