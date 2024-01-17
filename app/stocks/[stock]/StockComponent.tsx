@@ -75,7 +75,7 @@ const StockComponent: React.FC<{
   return (
     <div className="max-container padding-container flex flex-col py-0">
       <div className="relative flex flex-col lg:flex-row py-10">
-        <div className="relative lg:w-3/4 flex flex-col pb-20 pr-5 lg:px-32">
+        <div className="relative lg:w-3/4 flex flex-col pb-20 md:pr-5 lg:px-32">
           <div className="pb-10">
             <ImageWithFallback
               fallback={fallbackImage}
