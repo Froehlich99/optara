@@ -8,6 +8,11 @@ export const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
+function convertToLocalTime(time: number) {
+  const date = new Date(time);
+  return date.toLocaleDateString();
+}
+
 // The logic for filtering data based on the selected time frame
 export function filterGraphData(
   newButton: string,
@@ -84,13 +89,14 @@ export const updateChartData = (
 ): ChartData<"line", number[], string> | null => {
   if (!graphData) return null;
 
-  const formatLabel = (value: number[]) =>
-    selectedButton === "1 D."
-      ? new Date(value[0]).toLocaleTimeString()
-      : new Date(value[0]).toLocaleDateString();
-
+  const formatLabel = (value: number[]) => {
+    //this is neccessary because the API returns german time, but specifies the wrong time zone
+    const date = new Date(value[0] - 60 * 60 * 1000); // subtract 1 hour from the timestamp
+    return selectedButton === "1 D."
+      ? date.toLocaleTimeString()
+      : date.toLocaleDateString();
+  };
   const borderColor = change ? (change >= 0 ? "green" : "red") : "grey";
-
   return {
     labels: graphData.map((value) => formatLabel(value)),
     datasets: [
