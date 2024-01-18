@@ -14,11 +14,13 @@ import {
 import { timeFrame } from "@/constants/const";
 import { StockInfo } from "@/components/StockDetails";
 import StockDiscover from "@/components/StockDiscover";
+import { IUser } from "@/db/schema/User";
 
 const StockComponent: React.FC<{
   stockDetails: any;
   priceData: IScrip | null;
-}> = ({ stockDetails, priceData }) => {
+  user: IUser;
+}> = ({ stockDetails, priceData, user }) => {
   const [selectedButton, setSelectedButton] = useState("1 D.");
   const [change, setChange] = useState<number | null>(null);
   const [graphData, setGraphData] = useState(priceData?.series.history.data);
@@ -124,7 +126,11 @@ const StockComponent: React.FC<{
           {chartData && <Linechart data={chartData} />}
         </div>
         <div className="flex flex-col py-5 lg:w-1/4">
-          <StockInfo stockDetails={stockDetails} currentValue={currentValue} />
+          <StockInfo
+            stockDetails={stockDetails}
+            currentValue={currentValue}
+            user={user}
+          />
         </div>
       </div>
       <div className="relative flex flex-col lg:px-32 pb-10">

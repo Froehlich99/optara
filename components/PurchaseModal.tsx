@@ -1,15 +1,18 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { Tab } from "@headlessui/react";
 import { formatCurrency } from "@/lib/utils";
+import { IUser } from "@/db/schema/User";
 
 interface PurchaseModalProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   currentValue: number | null;
+  user: IUser;
 }
 
 export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   setIsOpen,
   currentValue,
+  user,
 }) => {
   const [isQuantitySelected, setIsQuantitySelected] = useState(false);
   const [quantity, setQuantity] = useState<number | null>(null);
@@ -84,6 +87,16 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
         <p>
           {formatCurrency(
             currentValue && quantity ? quantity * currentValue : 0
+          )}
+        </p>
+      </div>
+      <div className="inline-flex space-x-2 justify-between">
+        <p>Available Money: </p>
+        <p>
+          {formatCurrency(
+            currentValue && quantity
+              ? user.money - quantity * currentValue
+              : user.money
           )}
         </p>
       </div>

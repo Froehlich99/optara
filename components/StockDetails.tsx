@@ -8,15 +8,18 @@ import {
 } from "@floating-ui/react";
 import { useClick, useDismiss } from "@floating-ui/react";
 import { PurchaseModal } from "@/components/PurchaseModal";
+import { IUser } from "@/db/schema/User";
 
 interface StockInfoProps {
   stockDetails: IStockDetails | null;
   currentValue: number | null;
+  user: IUser;
 }
 
 export const StockInfo: React.FC<StockInfoProps> = ({
   stockDetails,
   currentValue,
+  user,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -78,13 +81,14 @@ export const StockInfo: React.FC<StockInfoProps> = ({
               >
                 <FloatingFocusManager context={context}>
                   <div
-                    className="w-full sm:w-1/2 xl:w-1/4 max-h-2/3 min-h-2/3 h-2/3 z-100 bg-slate-200 rounded-xl p-6"
+                    className="w-full sm:w-1/2 xl:w-1/4 max-h-2/3 min-h-2/3 h-2/3 z-100 bg-white rounded-xl p-6"
                     ref={refs.setFloating}
                     {...getFloatingProps()}
                   >
                     <PurchaseModal
                       setIsOpen={setIsOpen}
                       currentValue={currentValue}
+                      user={user}
                     />
                   </div>
                 </FloatingFocusManager>
