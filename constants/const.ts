@@ -23,7 +23,7 @@ export const timeFrame = [
   "Max.",
 ];
 
-export const quests = [
+export const emptyQuests = [
   {
     name: "Claim your first Quest!",
     rewardPoints: 10,

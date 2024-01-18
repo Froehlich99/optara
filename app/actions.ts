@@ -7,24 +7,55 @@ import { auth } from "@clerk/nextjs";
 import { IUser } from "@/db/schema/User";
 import { IQuest } from "@/constants/types";
 
+export async function completeQuest(quest: IQuest) {
+  await clientPromise;
+
+  const user: IUser | null = await getUser();
+
+  const clerkId = user?.clerkId;
+  try {
+    const user = await User.findOne({ clerkId: clerkId });
+
+    if (user) {
+      const qc = user.quests.find(
+        (userQuest: IQuest) => userQuest.name === quest.name
+      );
+        console.log(qc)
+      if (qc) {
+        qc.completion = 101;
+
+        const response = await User.updateOne(
+          { clerkId: clerkId },
+          { "$set": { "quests.$[quest].completion": 101 } },
+          { arrayFilters: [ { "quest.name": qc.name } ] }
+        );
+        await User.updateOne(
+          { clerkId: clerkId },
+          { $inc: { points: qc.rewardPoints } }
+        );
+        console.log(response)
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+
 export async function loadQuests(quests: Array<IQuest>) {
   await clientPromise;
 
   const user: IUser | null = await getUser();
 
   const clerkId = user?.clerkId;
-  // console.log(user)
   try {
-    // Find the user by clerkId
     const user = await User.findOne({ clerkId: clerkId });
   
     if (user) {
-      // Filter out quests that are already assigned to the user
       const newQuests = quests.filter((questToAdd) =>
         !user.quests.some((existingQuest: IQuest) => existingQuest.name === questToAdd.name)
       );
   
-      // If there are new quests to add, update the user's quests
       if (newQuests.length > 0) {
         const response = await User.updateOne(
           { _id: user._id },
@@ -36,46 +67,6 @@ export async function loadQuests(quests: Array<IQuest>) {
     catch (err) {
       console.log(err)
     }
-  // const filter = {
-  //   clerkId: clerkId,
-  //   quests: {
-  //     $not: {
-  //       $elemMatch: {
-  //         name: { $in: quests.map((quest:{
-  //           name: string;
-  //           rewardPoints: number;
-  //           completion: number;
-  //         }) => quest.name) }
-  //       }
-  //     }
-  //   }
-  // };
-  // const update = { $addToSet: { quests: { $each: quests } } };
-
-  // try {
-  //   const response = await User.updateOne(filter, update, {upsert: true});
-  //   console.log("Yay")
-  //   return true
-  // } catch (err: any) {
-  //   console.log(err)
-  //   return false
-  // }
-  //API CALL, above tries to connect to database directly
-  // fetch("/api/user-quest", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ clerkId: user ? user.clerkId : '', quests: quests }),
-  // })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log(data)
-  //     // Handle post request success
-  //   })
-  //   .catch((error) => {
-  //     // Handle post request error
-  //   });
 }
 
 export async function getStocks(query: string): Promise<IStock[] | null> {
