@@ -14,13 +14,6 @@ body {
   font-family: Inter;
 }
 
-.quest-item {
-  @apply rounded-xl hover:bg-gray-100 p-5 flex items-center border border-gray-300
-}
-.quest-item-points {
-  @apply rounded-full bg-gray-100 p-5 font-bold text-lg border flex flex-row items-center justify-center whitespace-nowrap
-}
-
 @layer utilities {
   .btn_white {
     @apply border-white bg-white px-8 py-3 text-green-50;

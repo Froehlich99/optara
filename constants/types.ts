@@ -7,6 +7,12 @@ export interface IStockDetails {
   // Extend with additional properties
 }
 
+export interface IQuest {
+  name: string;
+  rewardPoints: number;
+  completion: number;
+}
+
 export interface IScrip {
   info: {
     isin: string;

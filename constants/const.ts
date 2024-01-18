@@ -1,7 +1,7 @@
 // NAVIGATION
 export const NAV_LINKS = [
   { href: "/portfolio", key: "portfolio", label: "Portfolio" },
-  { href: "/", key: "quests", label: "Quests" },
+  { href: "/quests", key: "quests", label: "Quests" },
   { href: "/", key: "leaderboard ", label: "Leaderboard" },
 ];
 
@@ -22,3 +22,16 @@ export const timeFrame = [
   "5 Y.",
   "Max.",
 ];
+
+export const quests = [
+  {
+    name: "Claim your first Quest!",
+    rewardPoints: 10,
+    completion: 100
+  },
+  {
+    name: "Have a Portfolio worth at least 10€",
+    rewardPoints: 50,
+    completion: 0
+  }
+]
