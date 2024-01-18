@@ -65,7 +65,7 @@ export async function getStockPricing(lsid: string | undefined) {
   }
   const response = await fetch(
     `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${lsid}`,
-    { cache: "no-cache" }
+    { cache: "no-store" }
   );
 
   if (!response.ok) {
