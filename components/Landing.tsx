@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import ReactPlayer from "react-player";
-import Video from "next-video";
+
 export default function Home() {
   return (
     <main>
@@ -23,28 +22,22 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="top-0 video-container hidden md:block h-full">
-        <Video
-          src="/videos/hero-desktop.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="object-cover m-0 p-0"
-          controls={false}
-        />
+      <div className="hidden md:block h-screen w-full overflow-hidden object-cover">
+        <div className="w-full h-full relative overflow-hidden">
+          <video className="w-full h-full object-cover" autoPlay loop muted>
+            <source src="/videos/hero-desktop.mp4" type="video/mp4" />
+          </video>
+        </div>
       </div>
-      <div className="top-0 video-container block md:hidden h-full">
-        <Video
-          src="/videos/hero-mobile.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="object-cover m-0 p-0"
-          controls={false}
-        />
+
+      <div className="top-0 video-container block md:hidden h-screen w-full overflow-hidden">
+        <div className="w-full h-full relative overflow-hidden">
+          <video className="w-full h-full object-cover" autoPlay loop muted>
+            <source src="/videos/hero-mobile.mp4" type="video/mp4" />
+          </video>
+        </div>
       </div>
+
       <div className="absolute top-3/4 left-0 transform -translate-y-1/2 bg-transparent p-6 md:w-1/4">
         <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4">
           Wo Ihr Vermögen in sicheren Händen ist
