@@ -124,7 +124,7 @@ const StockComponent: React.FC<{
           {chartData && <Linechart data={chartData} />}
         </div>
         <div className="flex flex-col py-5 lg:w-1/4">
-          <StockInfo stockDetails={stockDetails} />
+          <StockInfo stockDetails={stockDetails} currentValue={currentValue} />
         </div>
       </div>
       <div className="relative flex flex-col lg:px-32 pb-10">

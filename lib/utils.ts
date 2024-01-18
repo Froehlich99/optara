@@ -8,11 +8,6 @@ export const formatCurrency = (amount: number) => {
   }).format(amount);
 };
 
-function convertToLocalTime(time: number) {
-  const date = new Date(time);
-  return date.toLocaleDateString();
-}
-
 // The logic for filtering data based on the selected time frame
 export function filterGraphData(
   newButton: string,
