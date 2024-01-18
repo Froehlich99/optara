@@ -1,5 +1,8 @@
+"use client";
 import Link from "next/link";
-
+import React from "react";
+import ReactPlayer from "react-player";
+import Video from "next-video";
 export default function Home() {
   return (
     <main>
@@ -21,16 +24,26 @@ export default function Home() {
       </div>
 
       <div className="top-0 video-container hidden md:block h-full">
-        <video autoPlay loop muted playsInline className="object-cover m-0 p-0">
-          <source src="/videos/hero-desktop.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <Video
+          src="/videos/hero-desktop.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="object-cover m-0 p-0"
+          controls={false}
+        />
       </div>
       <div className="top-0 video-container block md:hidden h-full">
-        <video autoPlay loop muted playsInline className="object-cover m-0 p-0">
-          <source src="/videos/hero-mobile.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <Video
+          src="/videos/hero-mobile.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="object-cover m-0 p-0"
+          controls={false}
+        />
       </div>
       <div className="absolute top-3/4 left-0 transform -translate-y-1/2 bg-transparent p-6 md:w-1/4">
         <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-4">

@@ -23,9 +23,12 @@
     "mongoose": "^8.0.3",
     "next": "14.0.4",
     "next-auth": "^4.24.5",
-    "react": "^18",
+    "next-video": "^0.11.2",
+    "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18"
+    "react-dom": "^18.2.0",
+    "react-player": "^2.14.1",
+    "react-video": "^1.5.3"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.3.1",
