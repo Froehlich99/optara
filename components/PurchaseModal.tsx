@@ -66,7 +66,6 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
     if (totalPurchaseCost > user.money) {
       return;
     }
-    console.log(totalPurchaseCost, numQuantity);
     buyStock(totalPurchaseCost, numQuantity, isin);
   };
   return (

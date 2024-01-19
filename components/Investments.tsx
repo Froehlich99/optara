@@ -12,7 +12,6 @@ interface InvestmentsProps {
 }
 
 const Investments = ({ holdings }: InvestmentsProps) => {
-  console.log(holdings);
   const [stocks, setStocks] = useState<IStock[]>([]);
 
   useEffect(() => {
@@ -26,7 +25,6 @@ const Investments = ({ holdings }: InvestmentsProps) => {
       }
 
       setStocks(newStocks);
-      console.log(stocks);
     }
 
     fetchStocks();
