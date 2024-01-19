@@ -5,6 +5,7 @@ import StockDiscover from "@/components/StockDiscover";
 import Linechart from "@/components/Linechart";
 import Investments from "@/components/Investments";
 import { IHolding, IUser } from "@/db/schema/User";
+export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
 const PortfolioComponent: React.FC<{
