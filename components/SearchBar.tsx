@@ -87,7 +87,7 @@ const SearchBar = () => {
         autoComplete="off"
         type="search"
         id="default-search"
-        className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white outline-none"
+        className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white outline-none regular-16"
         ref={refs.setReference}
         {...getReferenceProps()}
         placeholder="Search Stocks"
