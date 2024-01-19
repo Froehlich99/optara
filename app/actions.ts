@@ -101,11 +101,14 @@ export async function getStocks(query: string): Promise<IStock[] | null> {
 export async function getUser() {
   await clientPromise;
   const { userId }: { userId: string | null } = auth();
+  console.log(userId);
   const userData = await User.findOne({ clerkId: userId });
-  const userObject = await userData.toObject();
-  const userString = await JSON.stringify(userObject);
-  const userJson = await JSON.parse(userString);
-  return userJson;
+  if (userData) {
+    const userObject = await userData.toObject();
+    const userString = await JSON.stringify(userObject);
+    const userJson = await JSON.parse(userString);
+    return userJson;
+  }
 }
 
 export async function getStockByIsin(isin: string): Promise<IStock | null> {

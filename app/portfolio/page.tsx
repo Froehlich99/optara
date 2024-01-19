@@ -8,12 +8,15 @@ export const fetchCache = "force-no-store";
 
 const page = async ({ params }: { params: { stock: string } }) => {
   const user = await getUser();
-  const holdings: IHolding[] = user.holdings;
-  const totalPortfolioValue = user.portfolioValue[
-    user.portfolioValue.length - 1
-  ]
-    ? user.portfolioValue[user.portfolioValue.length - 1].value
-    : null;
+  let holdings: IHolding[] = [];
+  let totalPortfolioValue: any;
+  if (user) {
+    holdings = user.holdings;
+    totalPortfolioValue = user.portfolioValue[user.portfolioValue.length - 1]
+      ? user.portfolioValue[user.portfolioValue.length - 1].value
+      : null;
+  }
+
   return (
     <PortfolioComponent
       user={user}
