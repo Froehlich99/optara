@@ -18,6 +18,19 @@ const page = async () => {
 
   const currentUser: IUser | null = await getUser();
   await loadQuests(emptyQuests);
+  // const data = await getStockByIsin(params.stock);
+  // const user = await getUser();
+
+  // const stockDetails: IStockDetails | null = data
+  //   ? {
+  //       _id: data._id.toString(),
+  //       Company: data.Company,
+  //       LSID: data.LSID,
+  //       ISIN: data.ISIN,
+  //       Ticker: data.Ticker,
+  //     }
+  //   : null;
+
 
   var questItems = currentUser && currentUser.quests ? currentUser.quests : [];
   questItems = Array.isArray(questItems) ? questItems : [];
@@ -36,7 +49,7 @@ const page = async () => {
     points: 0
   }
   if (currentUser) {user.points = currentUser?.points}
-  
+  setTimeout(() => console.log(), 500)
 
   return <QuestComponent quests={testItems} user={user} />
 };

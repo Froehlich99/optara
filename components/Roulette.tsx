@@ -5,10 +5,10 @@ import { faker } from '@faker-js/faker';
 
 function Roulette() {
     const [animation, setAnimation] = useState(false);
-    const boxes = new Array(7).fill('').map(() => ({
-      id: faker.string.uuid(),
-      color: faker.internet.color()
-    }));
+    // const boxes = new Array(7).fill('').map(() => ({
+    //   id: faker.string.uuid(),
+    //   color: faker.internet.color()
+    // }));
   
     const parent = {
       visible: {
@@ -31,12 +31,13 @@ function Roulette() {
             initial="hidden"
             animate={animation ? "visible" : "hidden"}
           >
-            {boxes.concat(boxes).map((box) => (
+            {/* {boxes.concat(boxes).map((box) => (
               <div
                 style={{ width: "100px", height: "100px", backgroundColor: box.color }}
                 key={box.id}
               />
-            ))}
+            ))} */}
+            
           </motion.div>
         </div>
       </div>
