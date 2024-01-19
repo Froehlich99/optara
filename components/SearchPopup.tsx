@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
-import Image from "next/image";
 import ImageWithFallback from "./ImageWithFallback";
 import fallbackImage from "@/public/images/stock-placeholder.svg";
 import { popularStocks } from "@/constants/const";

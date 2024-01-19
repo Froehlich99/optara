@@ -94,6 +94,7 @@ export const StockInfo: React.FC<StockInfoProps> = ({
                         setIsOpen={setIsOpen}
                         currentValue={currentValue}
                         user={user}
+                        isin={stockDetails.ISIN}
                       />
                     </motion.div>
                   </FloatingFocusManager>

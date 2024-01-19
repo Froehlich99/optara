@@ -3,22 +3,24 @@ import { Tab } from "@headlessui/react";
 import { formatCurrency } from "@/lib/utils";
 import { IUser } from "@/db/schema/User";
 import Image from "next/image";
+import { buyStock } from "@/app/actions";
 
 interface PurchaseModalProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   currentValue: number | null;
   user: IUser;
+  isin: string;
 }
 
 export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   setIsOpen,
   currentValue,
   user,
+  isin,
 }) => {
   const [isEuroSelected, setIsEuroSelected] = useState(false);
   const [quantity, setQuantity] = useState<number | null>(null);
   const [amountEuro, setAmountEuro] = useState<number | null>(null);
-  const [availableFunds, setAvailableFunds] = useState<number | null>(null);
 
   const handleQuantityChange = (inputQuantity: number) => {
     let maxAffordableQuantity;
@@ -46,21 +48,26 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   const handlePurchase = () => {
     let numPrice = currentValue;
     let totalPurchaseCost;
+    let numQuantity: number = 0;
 
     if (isEuroSelected) {
       if (!numPrice || !amountEuro) return;
-      totalPurchaseCost = amountEuro;
+      numQuantity = Number((amountEuro / numPrice).toFixed(2));
+      totalPurchaseCost = Number(amountEuro.toFixed(2));
     } else {
-      let numQuantity = quantity;
-      if (!numQuantity || !numPrice || !availableFunds) return;
-      totalPurchaseCost = numPrice * numQuantity;
+      if (!quantity) {
+        return;
+      }
+      numQuantity = quantity;
+      if (!numQuantity || !numPrice) return;
+      totalPurchaseCost = Number((numPrice * numQuantity).toFixed(2));
     }
 
     if (totalPurchaseCost > user.money) {
-      alert("Not enough funds");
       return;
     }
-    setAvailableFunds(user.money - totalPurchaseCost);
+    console.log(totalPurchaseCost, numQuantity);
+    buyStock(totalPurchaseCost, numQuantity, isin);
   };
   return (
     <div className="flex flex-col gap-5 h-full w-full">
@@ -132,7 +139,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             </p>
           </div>
           <div className="inline-flex space-x-2 justify-between">
-            <p>Available Money: </p>
+            <p>Remaining Money: </p>
             <p>
               {formatCurrency(
                 currentValue && quantity
@@ -167,7 +174,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
             </p>
           </div>
           <div className="inline-flex space-x-2 justify-between">
-            <p>Available Money: </p>
+            <p>Remaining Money: </p>
             <p>
               {formatCurrency(
                 currentValue && amountEuro
@@ -182,7 +189,10 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       <div className="flex w-full justify-center mt-auto line-clamp-1 overflow-hidden">
         <button
           className="bg-green-90 px-8 py-4 text-white transition-all hover:bg-black flexCenter gap-3 rounded-full border w-full"
-          onClick={handlePurchase}
+          onClick={() => {
+            handlePurchase();
+            setIsOpen(false);
+          }}
         >
           Buy
         </button>

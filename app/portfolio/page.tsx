@@ -1,36 +1,21 @@
-import React from "react";
-import { getUser } from "../actions";
+import { getStockByIsin, getUser } from "@/app/actions";
+import { IScrip, IStockDetails } from "@/constants/types";
+import { getStockPricing } from "@/app/actions";
+import PortfolioComponent from "./PortfolioComponent";
+import { IHolding } from "@/db/schema/User";
+import { cache } from "react";
+export const dynamic = "force-dynamic";
 
-const page = async () => {
+const page = async ({ params }: { params: { stock: string } }) => {
   const user = await getUser();
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("de-DE", {
-      style: "currency",
-      currency: "EUR",
-    }).format(amount);
-  };
+  const holdings: IHolding[] = user.holdings;
+  const totalPortfolioValue = user.portfolioValue[0].value;
   return (
-    <div className="max-container padding-container flex flex-col py-0">
-      <div className="relative flex flex-col lg:flex-row py-10">
-        <div className="relative lg:w-3/4 flex flex-col pb-20 pr-5 lg:px-32">
-          <div className="pb-10">
-            <h1 className="bold-32">Portfolio</h1>
-            <h1 className="bold-20">
-              {user ? formatCurrency(user.portfolioValue) : "No Data"}
-            </h1>
-            <p className="regular-14 text-green-50">2,70%</p>
-          </div>
-          {/* TODO: Add User Linechart Data */}
-          {/* <Linechart/> */}
-        </div>
-        <div className="relative flex flex-col py-5">
-          <h1 className="bold-20">Investments</h1>
-        </div>
-      </div>
-      <div className="relative flex flex-col lg:px-32">
-        <h1 className="bold-32">Discover</h1>
-      </div>
-    </div>
+    <PortfolioComponent
+      user={user}
+      holdings={holdings}
+      totalPortfolioValue={totalPortfolioValue}
+    />
   );
 };
 

@@ -2,7 +2,7 @@
 
 import clientPromise from "@/db/connectDB";
 import Stock, { IStock } from "@/db/schema/Stock";
-import User from "@/db/schema/User";
+import User, { IHolding } from "@/db/schema/User";
 import { auth } from "@clerk/nextjs";
 import { IUser } from "@/db/schema/User";
 import { IQuest } from "@/constants/types";
@@ -20,7 +20,6 @@ export async function completeQuest(quest: IQuest) {
       const qc = user.quests.find(
         (userQuest: IQuest) => userQuest.name === quest.name
       );
-      console.log(qc);
       if (qc) {
         qc.completion = 101;
 
@@ -33,7 +32,6 @@ export async function completeQuest(quest: IQuest) {
           { clerkId: clerkId },
           { $inc: { points: qc.rewardPoints } }
         );
-        console.log(response);
       }
     }
   } catch (err) {
@@ -104,9 +102,9 @@ export async function getUser() {
   await clientPromise;
   const { userId }: { userId: string | null } = auth();
   const userData = await User.findOne({ clerkId: userId });
-  const userObject = userData.toObject();
-  const userString = JSON.stringify(userObject);
-  const userJson = JSON.parse(userString);
+  const userObject = await userData.toObject();
+  const userString = await JSON.stringify(userObject);
+  const userJson = await JSON.parse(userString);
   return userJson;
 }
 
@@ -142,5 +140,53 @@ export async function getStockPricing(lsid: string | undefined) {
   } else {
     const priceData = await response.json();
     return priceData;
+  }
+}
+
+export async function buyStock(
+  totalPurchaseCost: number,
+  numQuantity: number,
+  isin: string
+) {
+  await clientPromise;
+  const user: IUser | null = await getUser();
+
+  const clerkId = user?.clerkId;
+  try {
+    const user = await User.findOne({ clerkId: clerkId });
+    if (user) {
+      if (user.money < totalPurchaseCost) {
+        console.warn("Insufficient Balance");
+        return null;
+      }
+      const stock: IStock | null = await getStockByIsin(isin);
+      if (!stock) {
+        console.warn("Invalid ISIN");
+        return null;
+      }
+
+      // Check if the user already holds this stock, if so update quantity else add the stock in holdings.
+      let holding = user.holdings.find((h: IHolding) => h.ISIN === isin);
+      if (holding) {
+        holding.quantity += numQuantity;
+      } else {
+        holding = {
+          ISIN: isin,
+          quantity: numQuantity, // assuming 1 stock is bought if totalPurchaseCost equals stockPrice
+        };
+        user.holdings.push(holding);
+      }
+
+      // Update money and holdings in the user document
+      user.money -= totalPurchaseCost;
+      let newPortfolioValue = totalPurchaseCost;
+      user.portfolioValue.push({
+        date: new Date(),
+        value: newPortfolioValue,
+      });
+      await user.save();
+    }
+  } catch (err) {
+    console.log(err);
   }
 }
