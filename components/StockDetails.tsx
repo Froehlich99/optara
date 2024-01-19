@@ -9,6 +9,7 @@ import {
 import { useClick, useDismiss } from "@floating-ui/react";
 import { PurchaseModal } from "@/components/PurchaseModal";
 import { IUser } from "@/db/schema/User";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface StockInfoProps {
   stockDetails: IStockDetails | null;
@@ -73,27 +74,32 @@ export const StockInfo: React.FC<StockInfoProps> = ({
                 Buy
               </button>
             </div>
-            {isOpen && (
-              <FloatingOverlay
-                className="flex z-50 items-center justify-center"
-                lockScroll
-                style={{ background: "rgba(0, 0, 0, 0.8)" }}
-              >
-                <FloatingFocusManager context={context}>
-                  <div
-                    className="w-full sm:w-1/2 xl:w-1/4 max-h-2/3 min-h-2/3 h-2/3 z-100 bg-white rounded-xl p-6"
-                    ref={refs.setFloating}
-                    {...getFloatingProps()}
-                  >
-                    <PurchaseModal
-                      setIsOpen={setIsOpen}
-                      currentValue={currentValue}
-                      user={user}
-                    />
-                  </div>
-                </FloatingFocusManager>
-              </FloatingOverlay>
-            )}
+            <AnimatePresence>
+              {isOpen && (
+                <FloatingOverlay
+                  className="flex z-50 sm:items-center items-end justify-center"
+                  lockScroll
+                  style={{ background: "rgba(0, 0, 0, 0.8)" }}
+                >
+                  <FloatingFocusManager context={context}>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.2 }}
+                      className="w-full sm:w-1/2 xl:w-1/4 max-h-2/3 min-h-2/3 h-2/3 z-100 bg-white rounded-t-xl sm:rounded-xl p-6"
+                      ref={refs.setFloating}
+                      {...getFloatingProps()}
+                    >
+                      <PurchaseModal
+                        setIsOpen={setIsOpen}
+                        currentValue={currentValue}
+                        user={user}
+                      />
+                    </motion.div>
+                  </FloatingFocusManager>
+                </FloatingOverlay>
+              )}
+            </AnimatePresence>
             <div className="flex lg:w-full justify-center w-2/5">
               <button
                 className="bg-green-90 px-8 py-4 text-white transition-all hover:bg-black flexCenter gap-3 rounded-full border w-full"

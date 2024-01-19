@@ -76,7 +76,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
       <div className="inline-flex space-x-2 justify-between">
         <p>Quantity: </p>
         <input
-          className="block w-1/4 pe-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white outline-none text-right"
+          className="block w-1/4 pe-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-white outline-none text-right regular-16"
           value={quantity ? quantity : ""}
           type="number"
           onChange={(e) => setQuantity(Number(e.target.value))}
