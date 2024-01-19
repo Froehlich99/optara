@@ -35,7 +35,7 @@ const PortfolioComponent: React.FC<{
           <Investments holdings={holdings} />
         </div>
       </div>
-      <div className="relative flex flex-col lg:px-32">
+      <div className="relative flex flex-col lg:px-32 lg:h-[90vh]">
         <StockDiscover />
       </div>
     </div>
