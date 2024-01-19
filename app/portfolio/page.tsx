@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 const page = async ({ params }: { params: { stock: string } }) => {
   const user = await getUser();
   const holdings: IHolding[] = user.holdings;
-  const totalPortfolioValue = user.portfolioValue[0].value;
+  const totalPortfolioValue = user.portfolioValue[0] ? user.portfolioValue[0].value : null;
   return (
     <PortfolioComponent
       user={user}
