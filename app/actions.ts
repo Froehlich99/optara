@@ -20,27 +20,26 @@ export async function completeQuest(quest: IQuest) {
       const qc = user.quests.find(
         (userQuest: IQuest) => userQuest.name === quest.name
       );
-        console.log(qc)
+      console.log(qc);
       if (qc) {
         qc.completion = 101;
 
         const response = await User.updateOne(
           { clerkId: clerkId },
-          { "$set": { "quests.$[quest].completion": 101 } },
-          { arrayFilters: [ { "quest.name": qc.name } ] }
+          { $set: { "quests.$[quest].completion": 101 } },
+          { arrayFilters: [{ "quest.name": qc.name }] }
         );
         await User.updateOne(
           { clerkId: clerkId },
           { $inc: { points: qc.rewardPoints } }
         );
-        console.log(response)
+        console.log(response);
       }
     }
   } catch (err) {
     console.log(err);
   }
 }
-
 
 export async function loadQuests(quests: Array<IQuest>) {
   await clientPromise;
@@ -50,23 +49,25 @@ export async function loadQuests(quests: Array<IQuest>) {
   const clerkId = user?.clerkId;
   try {
     const user = await User.findOne({ clerkId: clerkId });
-  
+
     if (user) {
-      const newQuests = quests.filter((questToAdd) =>
-        !user.quests.some((existingQuest: IQuest) => existingQuest.name === questToAdd.name)
+      const newQuests = quests.filter(
+        (questToAdd) =>
+          !user.quests.some(
+            (existingQuest: IQuest) => existingQuest.name === questToAdd.name
+          )
       );
-  
+
       if (newQuests.length > 0) {
         const response = await User.updateOne(
           { _id: user._id },
           { $addToSet: { quests: { $each: newQuests } } }
         );
-        }
       }
     }
-    catch (err) {
-      console.log(err)
-    }
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 export async function getStocks(query: string): Promise<IStock[] | null> {
@@ -103,7 +104,10 @@ export async function getUser() {
   await clientPromise;
   const { userId }: { userId: string | null } = auth();
   const userData = await User.findOne({ clerkId: userId });
-  return userData;
+  const userObject = userData.toObject();
+  const userString = JSON.stringify(userObject);
+  const userJson = JSON.parse(userString);
+  return userJson;
 }
 
 export async function getStockByIsin(isin: string): Promise<IStock | null> {

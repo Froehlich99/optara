@@ -9,12 +9,11 @@ const page = async ({ params }: { params: { stock: string } }) => {
 
   const stockDetails: IStockDetails | null = data
     ? {
-        _id: data._id.toString(), // Convert to string if necessary
+        _id: data._id.toString(),
         Company: data.Company,
         LSID: data.LSID,
         ISIN: data.ISIN,
         Ticker: data.Ticker,
-        // ... include other properties as necessary
       }
     : null;
 
