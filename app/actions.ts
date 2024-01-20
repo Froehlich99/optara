@@ -6,6 +6,7 @@ import User, { IHolding } from "@/db/schema/User";
 import { auth } from "@clerk/nextjs";
 import { IUser } from "@/db/schema/User";
 import { IQuest } from "@/constants/types";
+import { revalidatePath } from "next/cache";
 
 export async function completeQuest(quest: IQuest) {
   await clientPromise;
@@ -101,7 +102,6 @@ export async function getStocks(query: string): Promise<IStock[] | null> {
 export async function getUser() {
   await clientPromise;
   const { userId }: { userId: string | null } = auth();
-  console.log(userId);
   const userData = await User.findOne({ clerkId: userId });
   if (userData) {
     const userObject = await userData.toObject();
@@ -109,6 +109,7 @@ export async function getUser() {
     const userJson = await JSON.parse(userString);
     return userJson;
   }
+  revalidatePath("/portfolio");
 }
 
 export async function getStockByIsin(isin: string): Promise<IStock | null> {
@@ -192,6 +193,7 @@ export async function buyStock(
         value: newPortfolioValue,
       });
       await user.save();
+      revalidatePath("/portfolio");
     }
   } catch (err) {
     console.log(err);

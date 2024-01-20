@@ -7,7 +7,10 @@ export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
 const page = async ({ params }: { params: { stock: string } }) => {
-  const user = await getUser();
+  let user = await getUser();
+  if (!user) {
+    user = await getUser();
+  }
   let holdings: IHolding[] = [];
   let totalPortfolioValue: any;
   if (user) {
