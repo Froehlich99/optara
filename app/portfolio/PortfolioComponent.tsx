@@ -5,6 +5,7 @@ import StockDiscover from "@/components/StockDiscover";
 import Linechart from "@/components/Linechart";
 import Investments from "@/components/Investments";
 import { IHolding, IUser } from "@/db/schema/User";
+import { formatCurrency } from "@/lib/utils";
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
@@ -13,12 +14,6 @@ const PortfolioComponent: React.FC<{
   holdings: IHolding[];
   totalPortfolioValue: number;
 }> = ({ user, holdings, totalPortfolioValue }) => {
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("de-DE", {
-      style: "currency",
-      currency: "EUR",
-    }).format(amount);
-  };
   return (
     <div className="max-container padding-container flex flex-col py-0">
       <div className="relative flex flex-col lg:flex-row py-10">
@@ -26,7 +21,7 @@ const PortfolioComponent: React.FC<{
           <div className="pb-10">
             <h1 className="bold-32">Portfolio</h1>
             <h1 className="bold-20">
-              {user ? formatCurrency(totalPortfolioValue) : "No Data"}
+              {user ? formatCurrency(totalPortfolioValue) : formatCurrency(0)}
             </h1>
             <p className="regular-14 text-green-50"></p>
           </div>
