@@ -18,8 +18,6 @@ const page = () => {
       .catch((error) => console.error("Error:", error));
   }, []);
 
-  if (!users || !users.length) return <div>Loading...</div>;
-
   return (
     <div className="max-container padding-container flex flex-col py-0 ">
       <ul>
