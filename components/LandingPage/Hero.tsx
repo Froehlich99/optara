@@ -10,7 +10,7 @@ export default function Home() {
           <img
             src="/images/cb.svg"
             alt="Logo"
-            className="h-4 md:h-6 lg:h-7 xl:h-8 w-auto mr-4 "
+            className="h-6 md:h-6 lg:h-7 xl:h-8 w-auto mr-4"
           />
         </div>
         <div className="flex item-center">
