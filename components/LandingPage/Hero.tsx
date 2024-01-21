@@ -54,7 +54,7 @@ export default function Home() {
 
       <div className="absolute bottom-0  left-0 transform -translate-y-1/2 bg-transparent p-6 md:w-1/4">
         <h1 className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white overflow-hidden">
-          Wo Ihr Vermögen in sicheren Händen ist
+          Where your assets are in safe hands
         </h1>
       </div>
     </main>
