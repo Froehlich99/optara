@@ -2,7 +2,7 @@
 export const NAV_LINKS = [
   { href: "/portfolio", key: "portfolio", label: "Portfolio" },
   { href: "/quests", key: "quests", label: "Quests" },
-  { href: "/", key: "leaderboard ", label: "Leaderboard" },
+  { href: "/leaderboard", key: "leaderboard ", label: "Leaderboard" },
 ];
 
 export const popularStocks = {
@@ -27,11 +27,11 @@ export const emptyQuests = [
   {
     name: "Claim your first Quest!",
     rewardPoints: 10,
-    completion: 100
+    completion: 100,
   },
   {
     name: "Have a Portfolio worth at least 10€",
     rewardPoints: 50,
-    completion: 0
-  }
-]
+    completion: 0,
+  },
+];
