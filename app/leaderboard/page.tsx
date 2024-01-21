@@ -2,6 +2,7 @@
 import { IUser } from "@/db/schema/User";
 import { formatCurrency } from "@/lib/utils";
 import { useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
 
 type LeaderboardUser = {
   username: string;
