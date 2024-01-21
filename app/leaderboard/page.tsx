@@ -25,7 +25,7 @@ const page = () => {
       <ul>
         {users.map((user, index) => {
           const textSize =
-            index < 4
+            index < 3
               ? "bold-16 sm:bold-20 lg:bold-32"
               : "regular-14 sm:regular-16 lg:regular-20";
           const medalUrls = [
