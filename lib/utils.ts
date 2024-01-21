@@ -66,7 +66,7 @@ export function filterGraphData(
             (time - startDate) / (1000 * 60 * 60 * 24)
           );
 
-          // include tevery third day
+          // include every third day
           return daysPassed % 3 === 0;
         });
       }
@@ -84,13 +84,20 @@ export function filterGraphData(
 export const updateChartData = (
   selectedButton: string,
   graphData: number[][] | undefined,
-  change: number | null
+  change: number | null,
+  type: "portfolio" | "stock"
 ): ChartData<"line", number[], string> | null => {
   if (!graphData) return null;
 
   const formatLabel = (value: number[]) => {
     //this is neccessary because the API returns german time, but specifies the wrong time zone
-    const date = new Date(value[0] - 60 * 60 * 1000); // subtract 1 hour from the timestamp
+    let date;
+    if (type === "stock") {
+      date = new Date(value[0] - 60 * 60 * 1000); // subtract 1 hour from the timestamp
+    } else {
+      date = new Date(value[0]);
+    }
+
     return selectedButton === "1 D."
       ? date.toLocaleTimeString()
       : date.toLocaleDateString();

@@ -62,7 +62,12 @@ const PortfolioComponent: React.FC<{
     setChange(newChange);
     setGraphData(newData);
   };
-  const chartData = updateChartData(selectedButton, graphData, change);
+  const chartData = updateChartData(
+    selectedButton,
+    graphData,
+    change,
+    "portfolio"
+  );
 
   return (
     <div className="max-container padding-container flex flex-col py-0">

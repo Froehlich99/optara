@@ -12,7 +12,7 @@ const page = () => {
   const [users, setUsers] = useState<LeaderboardUser[]>([]);
 
   useEffect(() => {
-    fetch("/api/leaderboard")
+    fetch("/api/leaderboard", { cache: "no-store" })
       .then((response) => response.json())
       .then((results: LeaderboardUser[]) => setUsers(results))
       .catch((error) => console.error("Error:", error));

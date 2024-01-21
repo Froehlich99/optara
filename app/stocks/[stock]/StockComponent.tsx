@@ -68,7 +68,7 @@ const StockComponent: React.FC<{
 
   useEffect(() => {
     //this is responsible for setting the labels and information of the chart itself
-    const chart = updateChartData(selectedButton, graphData, change);
+    const chart = updateChartData(selectedButton, graphData, change, "stock");
     setChartData(chart);
   }, [selectedButton, graphData]);
 
