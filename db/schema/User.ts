@@ -8,6 +8,7 @@ export interface IPortfolioEntry {
 export interface IHolding {
   ISIN: string;
   quantity: number;
+  LSID: string;
 }
 
 interface IQuest {
@@ -31,7 +32,7 @@ export interface IUser extends Document {
 const QuestSchema = new mongoose.Schema<IQuest>({
   name: { type: String, required: true },
   rewardPoints: { type: Number, required: true },
-  completion: { type: Number, required: true }
+  completion: { type: Number, required: true },
 });
 
 const PortfolioEntrySchema = new Schema<IPortfolioEntry>(
@@ -46,6 +47,7 @@ const HoldingSchema = new Schema<IHolding>(
   {
     ISIN: { type: String, required: true },
     quantity: { type: Number, required: true },
+    LSID: { type: String, required: true },
   },
   { _id: false }
 );
@@ -59,7 +61,7 @@ const UserSchema = new Schema<IUser>(
     totalInvestment: { type: Number, default: 0 },
     holdings: [HoldingSchema],
     points: { type: Number, default: 0 },
-    quests: [QuestSchema]
+    quests: [QuestSchema],
   },
   {
     timestamps: true,

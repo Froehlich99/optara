@@ -10,6 +10,7 @@ interface PurchaseModalProps {
   currentValue: number | null;
   user: IUser;
   isin: string;
+  lsid: string;
 }
 
 export const PurchaseModal: React.FC<PurchaseModalProps> = ({
@@ -17,6 +18,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
   currentValue,
   user,
   isin,
+  lsid,
 }) => {
   const [isEuroSelected, setIsEuroSelected] = useState(false);
   const [quantity, setQuantity] = useState<number | null>(null);
@@ -66,7 +68,7 @@ export const PurchaseModal: React.FC<PurchaseModalProps> = ({
     if (totalPurchaseCost > user.money) {
       return;
     }
-    buyStock(totalPurchaseCost, numQuantity, isin);
+    buyStock(totalPurchaseCost, numQuantity, isin, lsid);
   };
   return (
     <div className="flex flex-col gap-5 h-full w-full">

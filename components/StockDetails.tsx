@@ -95,6 +95,7 @@ export const StockInfo: React.FC<StockInfoProps> = ({
                         currentValue={currentValue}
                         user={user}
                         isin={stockDetails.ISIN}
+                        lsid={String(stockDetails.LSID)}
                       />
                     </motion.div>
                   </FloatingFocusManager>

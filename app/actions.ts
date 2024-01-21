@@ -150,7 +150,8 @@ export async function getStockPricing(lsid: string | undefined) {
 export async function buyStock(
   totalPurchaseCost: number,
   numQuantity: number,
-  isin: string
+  isin: string,
+  lsid: string
 ) {
   await clientPromise;
   const user: IUser | null = await getUser();
@@ -177,6 +178,7 @@ export async function buyStock(
         holding = {
           ISIN: isin,
           quantity: numQuantity, // assuming 1 stock is bought if totalPurchaseCost equals stockPrice
+          LSID: lsid,
         };
         user.holdings.push(holding);
       }
