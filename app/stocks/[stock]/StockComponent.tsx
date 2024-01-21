@@ -48,9 +48,16 @@ const StockComponent: React.FC<{
   useEffect(() => {
     // This effect is responsible for setting `graphData` when `priceData` updates
     if (priceData) {
+      let data;
+      if (selectedButton === "1 D.") {
+        data = priceData?.series.intraday.data;
+      } else {
+        data = priceData?.series.history.data;
+      }
       const initialGraphData = filterGraphData(
         selectedButton,
-        priceData,
+        data,
+        "stock",
         Date.now()
       );
 
@@ -68,8 +75,14 @@ const StockComponent: React.FC<{
   const timeFrames = timeFrame;
   const handleButtonClick = (newButton: string) => {
     setSelectedButton(newButton);
+    let data;
+    if (selectedButton === "1 D.") {
+      data = priceData?.series.intraday.data;
+    } else {
+      data = priceData?.series.history.data;
+    }
     const dateNow = Date.now();
-    const newData = filterGraphData(newButton, priceData, dateNow);
+    const newData = filterGraphData(newButton, data, "stock", dateNow);
     const newChange = calculateChange(newData);
     setChange(newChange);
     setGraphData(newData);

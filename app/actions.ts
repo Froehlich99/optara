@@ -185,15 +185,14 @@ export async function buyStock(
 
       // Update money and holdings in the user document
       user.money -= totalPurchaseCost;
+      user.moneySpent += totalPurchaseCost;
       let lastPortfolioValue =
-        user.portfolioValue.length > 0
-          ? user.portfolioValue[user.portfolioValue.length - 1].value
-          : 0;
-      let newPortfolioValue = lastPortfolioValue + totalPurchaseCost;
+        user.portfolioValue[user.portfolioValue.length - 1].value;
       user.portfolioValue.push({
         date: new Date(),
-        value: newPortfolioValue,
+        value: lastPortfolioValue,
       });
+
       await user.save();
       revalidatePath("/portfolio");
     }

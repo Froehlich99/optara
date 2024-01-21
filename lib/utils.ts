@@ -1,5 +1,5 @@
 import { IScrip } from "@/constants/types";
-import { IUser } from "@/db/schema/User";
+import { IPortfolioEntry, IUser } from "@/db/schema/User";
 import { ChartData } from "chart.js";
 
 export const formatCurrency = (amount: number) => {
@@ -12,21 +12,26 @@ export const formatCurrency = (amount: number) => {
 // The logic for filtering data based on the selected time frame
 export function filterGraphData(
   newButton: string,
-  priceData: IScrip | null,
+  priceData: number[][] | undefined,
+  type: "stock" | "portfolio",
   dateNow: number
 ) {
   let newData;
   switch (newButton) {
     case "1 D.":
-      newData = priceData?.series.intraday.data; // for '1 D.', use raw intradayData
+      if (type === "stock") {
+        newData = priceData;
+      } else {
+        newData = priceData; //but only for the last 24 Hours
+      }
       break;
     case "1 M.":
-      newData = priceData?.series.history.data.filter(
+      newData = priceData?.filter(
         ([time, value]) => dateNow - time <= 1000 * 60 * 60 * 24 * 30
       );
       break;
     case "6 M.":
-      newData = priceData?.series.history.data.filter(
+      newData = priceData?.filter(
         ([time, value]) => dateNow - time <= 1000 * 60 * 60 * 24 * 30 * 6
       );
       break;
@@ -37,19 +42,19 @@ export function filterGraphData(
         0,
         1
       ).getTime();
-      newData = priceData?.series.history.data.filter(
+      newData = priceData?.filter(
         ([time, value]) => time >= startOfCurrentYear
       );
       break;
     case "1 Y.":
       // filter out data that is one year old
-      newData = priceData?.series.history.data.filter(
+      newData = priceData?.filter(
         ([time, value]) => dateNow - time <= 1000 * 60 * 60 * 24 * 365
       );
       break;
     case "5 Y.":
       // filter out data that is five years old
-      const fiveYearData = priceData?.series.history.data.filter(
+      const fiveYearData = priceData?.filter(
         ([time, value]) => dateNow - time <= 1000 * 60 * 60 * 24 * 365 * 5
       );
 
@@ -68,9 +73,7 @@ export function filterGraphData(
       break;
     case "Max.":
       // include every 10th day
-      newData = priceData?.series.history.data?.filter(
-        (_, index) => index % 10 === 0
-      );
+      newData = priceData?.filter((_, index) => index % 10 === 0);
       break;
     default:
       break;

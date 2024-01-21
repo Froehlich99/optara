@@ -25,7 +25,7 @@ async function calculatePortfolio(user: IUser) {
 
   user.portfolioValue.push({
     date: new Date(),
-    value: totalPortfolioValue,
+    value: totalPortfolioValue + user.money,
   });
 
   // Build the updated User object
