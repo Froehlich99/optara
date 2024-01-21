@@ -1,4 +1,5 @@
 import { IScrip } from "@/constants/types";
+import { IUser } from "@/db/schema/User";
 import { ChartData } from "chart.js";
 
 export const formatCurrency = (amount: number) => {
