@@ -75,8 +75,9 @@ const StockComponent: React.FC<{
   const timeFrames = timeFrame;
   const handleButtonClick = (newButton: string) => {
     setSelectedButton(newButton);
+
     let data;
-    if (selectedButton === "1 D.") {
+    if (newButton === "1 D.") {
       data = priceData?.series.intraday.data;
     } else {
       data = priceData?.series.history.data;
