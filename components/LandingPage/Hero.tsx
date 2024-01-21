@@ -24,7 +24,14 @@ export default function Home() {
 
       <div className="hidden md:block h-screen w-full overflow-hidden object-cover">
         <div className="w-full h-full relative overflow-hidden">
-          <video className="w-full h-full object-cover" autoPlay loop muted>
+          <video
+            className="w-full h-full object-cover"
+            autoPlay
+            playsInline
+            loop
+            muted
+            controls={false}
+          >
             <source src="/videos/hero-desktop.mp4" type="video/mp4" />
           </video>
         </div>
@@ -32,7 +39,14 @@ export default function Home() {
 
       <div className="block md:hidden h-screen w-full overflow-hidden">
         <div className="w-full h-full relative overflow-hidden">
-          <video className="w-full h-full object-cover" autoPlay loop muted>
+          <video
+            className="w-full h-full object-cover"
+            autoPlay
+            playsInline
+            loop
+            muted
+            controls={false}
+          >
             <source src="/videos/hero-mobile.mp4" type="video/mp4" />
           </video>
         </div>
