@@ -10,6 +10,7 @@ import { useClick, useDismiss } from "@floating-ui/react";
 import { PurchaseModal } from "@/components/PurchaseModal";
 import { IUser } from "@/db/schema/User";
 import { AnimatePresence, motion } from "framer-motion";
+import { SellModal } from "./SellModal";
 
 interface StockInfoProps {
   stockDetails: IStockDetails | null;
@@ -22,20 +23,36 @@ export const StockInfo: React.FC<StockInfoProps> = ({
   currentValue,
   user,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const heldStock = user.holdings.find(
+    (holding) => holding.ISIN === stockDetails?.ISIN
+  );
+  const [isBuyOpen, setIsBuyOpen] = useState(false);
+  const [isSellOpen, setIsSellOpen] = useState(false);
 
-  const { refs, context } = useFloating({
-    open: isOpen,
-    onOpenChange: setIsOpen,
+  const { refs: buyRefs, context: buyContext } = useFloating({
+    open: isBuyOpen,
+    onOpenChange: setIsBuyOpen,
   });
-  const click = useClick(context);
-  const dismiss = useDismiss(context, {
+
+  const { refs: sellRefs, context: sellContext } = useFloating({
+    open: isSellOpen,
+    onOpenChange: setIsSellOpen,
+  });
+  const buyClick = useClick(buyContext);
+  const buyDismiss = useDismiss(buyContext, { outsidePressEvent: "mousedown" });
+  const {
+    getReferenceProps: getBuyReferenceProps,
+    getFloatingProps: getBuyFloatingProps,
+  } = useInteractions([buyClick, buyDismiss]);
+
+  const sellClick = useClick(sellContext);
+  const sellDismiss = useDismiss(sellContext, {
     outsidePressEvent: "mousedown",
   });
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    click,
-    dismiss,
-  ]);
+  const {
+    getReferenceProps: getSellReferenceProps,
+    getFloatingProps: getSellFloatingProps,
+  } = useInteractions([sellClick, sellDismiss]);
 
   if (!stockDetails) return null;
 
@@ -68,30 +85,30 @@ export const StockInfo: React.FC<StockInfoProps> = ({
             <div className="flex lg:w-full justify-center w-2/5">
               <button
                 className="bg-green-90 px-8 py-4 text-white transition-all hover:bg-black flexCenter gap-3 rounded-full border w-full"
-                ref={refs.setReference}
-                {...getReferenceProps()}
+                ref={buyRefs.setReference}
+                {...getBuyReferenceProps()}
               >
                 Buy
               </button>
             </div>
             <AnimatePresence>
-              {isOpen && (
+              {isBuyOpen && (
                 <FloatingOverlay
                   className="flex z-50 sm:items-center items-end justify-center"
                   lockScroll
                   style={{ background: "rgba(0, 0, 0, 0.8)" }}
                 >
-                  <FloatingFocusManager context={context}>
+                  <FloatingFocusManager context={buyContext}>
                     <motion.div
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.2 }}
                       className="w-full sm:w-1/2 xl:w-1/4 max-h-2/3 min-h-2/3 h-2/3 z-100 bg-white rounded-t-xl sm:rounded-xl p-6"
-                      ref={refs.setFloating}
-                      {...getFloatingProps()}
+                      ref={buyRefs.setFloating}
+                      {...getBuyFloatingProps()}
                     >
                       <PurchaseModal
-                        setIsOpen={setIsOpen}
+                        setIsOpen={setIsBuyOpen}
                         currentValue={currentValue}
                         user={user}
                         isin={stockDetails.ISIN}
@@ -105,12 +122,39 @@ export const StockInfo: React.FC<StockInfoProps> = ({
             <div className="flex lg:w-full justify-center w-2/5">
               <button
                 className="bg-green-90 px-8 py-4 text-white transition-all hover:bg-black flexCenter gap-3 rounded-full border w-full"
-                ref={refs.setReference}
-                {...getReferenceProps()}
+                ref={sellRefs.setReference}
+                {...getSellReferenceProps()}
+                disabled={!heldStock}
               >
                 Sell
               </button>
             </div>
+            <AnimatePresence>
+              {isSellOpen && (
+                <FloatingOverlay
+                  className="flex z-50 sm:items-center items-end justify-center"
+                  lockScroll
+                  style={{ background: "rgba(0, 0, 0, 0.8)" }}
+                >
+                  <FloatingFocusManager context={sellContext}>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.2 }}
+                      className="w-full sm:w-1/2 xl:w-1/4 max-h-2/3 min-h-2/3 h-2/3 z-100 bg-white rounded-t-xl sm:rounded-xl p-6"
+                      ref={sellRefs.setFloating}
+                      {...getSellFloatingProps()}
+                    >
+                      <SellModal
+                        setIsOpen={setIsSellOpen}
+                        currentValue={currentValue}
+                        userHolding={heldStock}
+                      />
+                    </motion.div>
+                  </FloatingFocusManager>
+                </FloatingOverlay>
+              )}
+            </AnimatePresence>
           </div>
         </>
       ) : (

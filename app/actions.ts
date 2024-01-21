@@ -200,3 +200,45 @@ export async function buyStock(
     console.log(err);
   }
 }
+
+export async function sellStock(
+  totalSellingValue: number,
+  quantityToSell: number,
+  isin: string
+) {
+  await clientPromise;
+  const user: IUser | null = await getUser();
+
+  const clerkId = user?.clerkId;
+  try {
+    const user = await User.findOne({ clerkId: clerkId });
+    if (user) {
+      const holding = user.holdings.find((h: IHolding) => h.ISIN === isin);
+
+      if (!holding || holding.quantity < quantityToSell) {
+        console.warn("Insufficient shares to sell");
+        return null;
+      }
+
+      if (holding.quantity === quantityToSell) {
+        user.holdings = user.holdings.filter((h: IHolding) => h.ISIN !== isin);
+      } else {
+        holding.quantity -= quantityToSell;
+      }
+
+      // Update money and holdings
+      user.money += totalSellingValue;
+      let lastPortfolioValue =
+        user.portfolioValue[user.portfolioValue.length - 1].value;
+      user.portfolioValue.push({
+        date: new Date(),
+        value: lastPortfolioValue,
+      });
+
+      await user.save();
+      revalidatePath("/portfolio");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
