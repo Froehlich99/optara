@@ -1,5 +1,6 @@
 import clientPromise from "@/db/connectDB";
 import User, { IUser } from "@/db/schema/User";
+import { revalidatePath } from "next/cache";
 import type { NextRequest } from "next/server";
 
 async function calculatePortfolio(user: IUser) {
@@ -8,7 +9,8 @@ async function calculatePortfolio(user: IUser) {
 
   for (const holding of user.holdings) {
     const response = await fetch(
-      `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${holding.LSID}`
+      `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${holding.LSID}`,
+      { next: { revalidate: 0 } }
     );
 
     if (!response.ok) {
@@ -16,7 +18,8 @@ async function calculatePortfolio(user: IUser) {
     }
 
     const { series } = await response.json();
-    const stockPrice = series?.intraday?.data[0][1];
+    const stockPrice =
+      series?.intraday?.data[series.intraday.data.length - 1][1];
     if (!stockPrice)
       throw new Error(`Couldn't find stock price for ${holding.LSID}`);
 
@@ -52,6 +55,7 @@ export async function GET(request: NextRequest) {
       }
     }
     // Send back a success response
+    revalidatePath("/api/cron");
     return new Response("Values Updated Successfully");
   } catch (err: any) {
     // Return the error to the client

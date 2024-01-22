@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import User, { IUser, IPortfolioEntry } from "@/db/schema/User";
+
 export const dynamic = "force-dynamic";
 
 export async function GET(_request: NextRequest) {
