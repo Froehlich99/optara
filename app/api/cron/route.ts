@@ -56,6 +56,7 @@ export async function GET(request: NextRequest) {
     }
     // Send back a success response
     revalidatePath("/api/cron");
+    revalidatePath("/portfolio");
     return new Response("Values Updated Successfully");
   } catch (err: any) {
     // Return the error to the client
