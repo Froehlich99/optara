@@ -24,8 +24,7 @@ const QuestComponent = ({
   redeemableRewards: any;
 }) => {
   const [points, setPoints] = useState(user.points);
-  const [mustSpin, setMustSpin] = useState(false)
-
+  const [mustSpin, setMustSpin] = useState(false);
   return (
     <div className="max-container padding-container flex flex-col py-0">
       <div className="relative flex flex-col lg:flex-row py-10">
@@ -34,7 +33,11 @@ const QuestComponent = ({
             <h1 className="bold-32">Quests</h1>
             <h1 className="bold-20">{points} Points</h1>
           </div>
-          <Roulette imageData={imageData} mustSpin={mustSpin}/>
+          <Roulette
+            imageData={imageData}
+            mustSpin={mustSpin}
+            setMustSpin={setMustSpin}
+          />
         </div>
         <div className="gap-5 overflow-y-scroll lg:h-[80vh]  overflow-x-hidden custom-scrollbar">
           <div className="relative flex flex-col py-5 space-y-4 w-full lx:w-1/2">
@@ -67,7 +70,13 @@ const QuestComponent = ({
         <h1 className="bold-32">Redeem Points</h1>
         <div className="grid grid-cols-3 py-5 gap-4">
           {redeemableRewards.map((reward: any) => (
-            <RedeemableReward reward={reward} points={points} setPoints={setPoints} mustSpin={mustSpin} setMustSpin={setMustSpin}/>
+            <RedeemableReward
+              reward={reward}
+              points={points}
+              setPoints={setPoints}
+              mustSpin={mustSpin}
+              setMustSpin={setMustSpin}
+            />
           ))}
         </div>
       </div>
