@@ -20,7 +20,6 @@ const RedeemableReward = ({ reward, points }: { reward: any, points: number }) =
     }
 
     const affordability = Math.round((points / reward.cost) * 100)
-    console.log(affordability)
 
 
     const handleClick = async () => {

@@ -3,20 +3,37 @@ import React, { useState } from 'react';
 import { useUser } from "@clerk/nextjs";
 import { completeQuest } from "../app/actions";
 import { motion } from 'framer-motion';
+import { IUser } from '@/db/schema/User';
 
 
 // import { quests } from "@/constants/const";
 
 
-const QuestItem = ({ quest, type, setPoints, points }: { quest: any, type: string, setPoints: any, points: number }) => {
+const QuestItem = ({ quest, type, setPoints, points, user }: { quest: any, type: string, setPoints: any, points: number, user:IUser }) => {
 
     const [scale, setScale] = useState(1);
     const [isClicked, setClickState] = useState(false)
 
     const [isVisible, setIsVisible] = useState(true);
 
-    function hideDiv() {
-        setIsVisible(false);
+    // Fill Quest completion
+    if (quest.completion < 101) {
+    if (quest.name == 'Have a Portfolio worth at least 10€') {
+        const pValue = user.portfolioValue[user.portfolioValue.length - 1].value
+
+        if (pValue > 0){
+            quest.completion = Math.round((pValue / 10) * 100)
+        }
+    } else if (quest.name == 'Own three different stocks') {
+        const holdings = user.holdings.length
+        if (holdings > 0){
+            quest.completion = Math.round((holdings / 3) * 100)
+        }
+    }
+
+}
+    if (quest.completion > 101) {
+        quest.completion = 101
     }
 
 

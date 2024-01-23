@@ -35,13 +35,13 @@ const QuestComponent = ({ quests, user, randISINs, redeemableRewards }: { quests
           <div className="relative flex flex-col py-5 space-y-4 w-full lx:w-1/2">
             <h1 className="text-2xl font-bold mb-5">Open Quests</h1>
             {
-              quests.map(quest => <QuestItem quest={quest} type='open' setPoints={setPoints} points={points} />)
+              quests.map(quest => <QuestItem quest={quest} type='open' setPoints={setPoints} points={points} user={user} />)
             }
           </div>
           <div className="relative flex flex-col py-5 space-y-4 w-full lx:w-1/2 ">
             <h1 className="text-2xl font-bold mb-5">Completed Quests</h1>
             {
-              quests.map(quest => <QuestItem quest={quest} type='completed' setPoints={setPoints} points={points} />)
+              quests.map(quest => <QuestItem quest={quest} type='completed' setPoints={setPoints} points={points} user={user} />)
             }
           </div>
         </div>

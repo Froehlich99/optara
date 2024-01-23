@@ -42,7 +42,7 @@ const page = async () => {
   if (currentUser) {user.points = currentUser?.points}
 
 
-  return <QuestComponent quests={testItems} user={user} randISINs={randISINs} redeemableRewards={rewards}/>
+  return <QuestComponent quests={testItems} user={currentUser} randISINs={randISINs} redeemableRewards={rewards}/>
 };
 
 export default page;

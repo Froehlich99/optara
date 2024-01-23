@@ -172,10 +172,8 @@ export async function getStockPricing(lsid: string | undefined) {
 }
 
 export async function getFreeStock(
-  totalPurchaseCost: number,
   numQuantity: number,
   isin: string,
-  lsid: string
 ) {
   await clientPromise;
   const user: IUser | null = await getUser();
@@ -184,10 +182,6 @@ export async function getFreeStock(
   try {
     const user = await User.findOne({ clerkId: clerkId });
     if (user) {
-      if (user.money < totalPurchaseCost) {
-        console.warn("Insufficient Balance");
-        return null;
-      }
       const stock: IStock | null = await getStockByIsin(isin);
       if (!stock) {
         console.warn("Invalid ISIN");
@@ -202,14 +196,12 @@ export async function getFreeStock(
         holding = {
           ISIN: isin,
           quantity: numQuantity, // assuming 1 stock is bought if totalPurchaseCost equals stockPrice
-          LSID: lsid,
+          LSID: stock.LSID
         };
         user.holdings.push(holding);
       }
 
       // Update money and holdings in the user document
-      user.money -= totalPurchaseCost;
-      user.moneySpent += totalPurchaseCost;
       let lastPortfolioValue =
         user.portfolioValue[user.portfolioValue.length - 1].value;
       user.portfolioValue.push({
