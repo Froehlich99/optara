@@ -24,6 +24,7 @@ const QuestComponent = ({
   redeemableRewards: any;
 }) => {
   const [points, setPoints] = useState(user.points);
+  const [mustSpin, setMustSpin] = useState(false)
 
   return (
     <div className="max-container padding-container flex flex-col py-0">

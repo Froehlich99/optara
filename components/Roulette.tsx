@@ -46,6 +46,9 @@ const Roulette = ({ imageData }: Props) => {
 
   const handleSpinClick = () => {
     if (!mustSpin) {
+      // setMustSpin(true);
+    }
+  }
       const newPrizeNumber = Math.floor(Math.random() * data.length);
       setPrizeNumber(newPrizeNumber);
       setMustSpin(true);

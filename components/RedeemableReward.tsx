@@ -1,14 +1,14 @@
 "use client";
 import React, { useState } from 'react';
 import { useUser } from "@clerk/nextjs";
-import { completeQuest } from "../app/actions";
+import { addMoney } from "../app/actions";
 import { motion } from 'framer-motion';
 
 
 // import { quests } from "@/constants/const";
 
 
-const RedeemableReward = ({ reward, points }: { reward: any, points: number }) => {
+const RedeemableReward = ({ reward, setPoints, points, mustSpin, setMustSpin }: { reward: any, setPoints: any, points: number, mustSpin: boolean, setMustSpin: any }) => {
 
     const [scale, setScale] = useState(1);
     const [isClicked, setClickState] = useState(false)
@@ -30,7 +30,14 @@ const RedeemableReward = ({ reward, points }: { reward: any, points: number }) =
             // setScale(0)
             // setTimeout(() => {quest.completion = 101
             //     setPoints(points + quest.rewardPoints)}, 500)
-            
+            if(reward.name == '+5€ for your account') {
+                addMoney(5)
+            } else if (reward.name == '+50€ for your account') {
+                addMoney(50)
+            } else if (reward.name == 'Spin the Wheel and get a free stock!') {
+                if(!mustSpin){setMustSpin(true)}
+            }
+            setPoints(points - reward.cost)
 
         } else {
             setClickState(true)

@@ -55,7 +55,7 @@ export const rewards = [
   },
   {
     name: "+50€ for your account",
-    cost: "1000"
+    cost: "900"
   },
   {
     name: "No transaction costs on next buy",

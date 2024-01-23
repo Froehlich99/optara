@@ -29,6 +29,9 @@ const QuestItem = ({ quest, type, setPoints, points, user }: { quest: any, type:
         if (holdings > 0){
             quest.completion = Math.round((holdings / 3) * 100)
         }
+    } else if (quest.name == 'Log in to the app 7 days in a row') {
+        const daysLoggedIn = 1
+        quest.completion = Math.round((daysLoggedIn / 7) * 100)
     }
 
 }
