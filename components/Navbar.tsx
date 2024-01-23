@@ -22,7 +22,7 @@ const Navbar = () => {
         className="flexBetween max-container padding-container relative z-30 py-3"
       >
         <div className="flex flex-row items-center min-w-0 z-20">
-          <Link href={"/"}>
+          <Link href={"/portfolio"}>
             <Image
               className="p-0 m-0"
               src={"/images/cb-cropped.svg"}
