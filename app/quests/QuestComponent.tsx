@@ -52,7 +52,7 @@ const QuestComponent = ({ quests, user, randISINs, redeemableRewards }: { quests
         <div className="grid grid-cols-3 py-5 gap-4">
 
         {
-          redeemableRewards.map(reward => <RedeemableReward reward={reward} points={points} />)
+          redeemableRewards.map((reward:any) => <RedeemableReward reward={reward} points={points} />)
         }
         </div>
         

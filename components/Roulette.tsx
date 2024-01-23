@@ -22,8 +22,8 @@ function Roulette({ randomStocks }: { randomStocks: any }) {
       }
     }
   }
-  let data = []
-  boxes.forEach((stock, index) => {
+  let data: any = []
+  boxes.forEach((stock: any, index: any) => {
     data.push({
         option: index,
         image: { uri: 'https://assets.traderepublic.com/img/logos/' + stock + '/v2/light.min.svg',
@@ -58,51 +58,6 @@ function Roulette({ randomStocks }: { randomStocks: any }) {
     />
     <button onClick={() => handleSpinClick()}>Spin!</button>
     </div>
-  //   <div>
-  //     <button onClick={() => setAnimation(!animation)}>Start/Stop</button>
-  //     <div
-  // className='overflow-x-hidden h-max grid grid-flow-col flex'>
-  //       <motion.div
-  //   className="w-32 h-32 flex flex-row"
-  //         variants={parent}
-  //         initial="hidden"
-  //         animate={animation ? "visible" : "hidden"}
-  //       >
-  //         {boxes.concat(boxes).map((box: string) => (
-  //     <div className='h-16 w-16 flex-shrink-0'>
-  //             <ImageWithFallback
-  //               fallback={fallbackImage}
-  //               src={`https://assets.traderepublic.com/img/logos/${box}/v2/light.min.svg`}
-  //               alt=""
-  //               width={256}
-  //               height={256}
-  //             />
-  //           </div>
-  //         ))}
-
-  //       </motion.div>
-  //       <motion.div
-  //   className="w-32 h-32 flex flex-row"
-  //         variants={parent}
-  //         initial="hidden"
-  //         animate={animation ? "visible" : "hidden"}
-  //       >
-  //         {boxes.concat(boxes).map((box: string) => (
-  //     <div className='h-16 w-16 flex-shrink-0'>
-  //             <ImageWithFallback
-  //               fallback={fallbackImage}
-  //               src={`https://assets.traderepublic.com/img/logos/${box}/v2/light.min.svg`}
-  //               alt=""
-  //               width={256}
-  //               height={256}
-  //             />
-  //           </div>
-  //         ))}
-
-  //       </motion.div>
-        
-  //     </div>
-  //   </div>
   );
 }
 
