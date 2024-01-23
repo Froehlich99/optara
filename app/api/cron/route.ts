@@ -8,20 +8,28 @@ async function calculatePortfolio(user: IUser) {
   let totalPortfolioValue = 0;
 
   for (const holding of user.holdings) {
-    const response = await fetch(
-      `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${holding.LSID}`,
-      { next: { revalidate: 0 } }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch stock information for ${holding.LSID}`);
+    let response;
+    try {
+      response = await fetch(
+        `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${holding.LSID}`,
+        { next: { revalidate: 0 } }
+      );
+      if (!response.ok || response === undefined) {
+        console.log(`Failed to fetch stock information for ${holding.LSID}`);
+        continue;
+      }
+    } catch (e) {
+      console.log(`Failed to fetch stock information for ${holding.LSID}`);
+      continue;
     }
 
     const { series } = await response.json();
     const stockPrice =
       series?.intraday?.data[series.intraday.data.length - 1][1];
-    if (!stockPrice)
-      throw new Error(`Couldn't find stock price for ${holding.LSID}`);
+    if (!stockPrice) {
+      console.log(`Couldn't find stock price for ${holding.LSID}`);
+      continue;
+    }
 
     totalPortfolioValue += stockPrice * holding.quantity;
   }
