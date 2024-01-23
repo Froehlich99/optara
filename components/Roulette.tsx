@@ -14,7 +14,12 @@ type Props = {
 const Roulette = ({ imageData, mustSpin }: {imageData: any, mustSpin: boolean}) => {
   // const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
-  const boxes = imageData;
+  const [stockImageData, setStockImageData] = useState(imageData)
+  // let boxes: any[] = [];
+  // if (!mustSpin) {
+  //   setStockImageData(imageData)
+  // }
+  const boxes = stockImageData
 
   const parent = {
     visible: {
