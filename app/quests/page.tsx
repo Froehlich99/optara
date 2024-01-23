@@ -39,7 +39,6 @@ const page = async () => {
     imageDataPromises = randISINs.map((stock) => getStockImage(stock));
   }
   const imageData = await Promise.all(imageDataPromises);
-  console.log(imageData);
 
   var questItems = currentUser && currentUser.quests ? currentUser.quests : [];
   questItems = Array.isArray(questItems) ? questItems : [];
