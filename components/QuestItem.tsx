@@ -18,7 +18,6 @@ const QuestItem = ({ quest, type, setPoints, points }: { quest: any, type: strin
     function hideDiv() {
         setIsVisible(false);
     }
-    // console.log("I'm a quest:", points,quest)
 
 
     const handleClick = async () => {

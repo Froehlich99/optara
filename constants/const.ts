@@ -34,4 +34,35 @@ export const emptyQuests = [
     rewardPoints: 50,
     completion: 0,
   },
+  {
+    name: "Log in to the app 7 days in a row",
+    rewardPoints: 70,
+    completion: 0,
+  },
+  {
+    name: "Own three different stocks",
+    rewardPoints: 100,
+    completion: 0,
+  },
+
 ];
+
+
+export const rewards = [
+  {
+    name: "+5€ for your account",
+    cost: "100"
+  },
+  {
+    name: "+50€ for your account",
+    cost: "1000"
+  },
+  {
+    name: "No transaction costs on next buy",
+    cost: "1000"
+  },
+  {
+    name: "Spin the Wheel and get a free stock!",
+    cost: "10"
+  }
+]

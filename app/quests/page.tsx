@@ -1,9 +1,9 @@
 
 import Roulette from "@/components/Roulette";
-import { getUser, loadQuests } from "../actions";
+import { getUser, loadQuests, getRandomIsins } from "../actions";
 import { IUser } from "@/db/schema/User";
 import QuestItem from "@/components/QuestItem";
-import { emptyQuests } from "@/constants/const";
+import { emptyQuests, rewards } from "@/constants/const";
 import QuestComponent from "./QuestComponent";
 
 
@@ -18,18 +18,9 @@ const page = async () => {
 
   const currentUser: IUser | null = await getUser();
   await loadQuests(emptyQuests);
-  // const data = await getStockByIsin(params.stock);
-  // const user = await getUser();
 
-  // const stockDetails: IStockDetails | null = data
-  //   ? {
-  //       _id: data._id.toString(),
-  //       Company: data.Company,
-  //       LSID: data.LSID,
-  //       ISIN: data.ISIN,
-  //       Ticker: data.Ticker,
-  //     }
-  //   : null;
+  const randISINs = await getRandomIsins({count: 10})
+  console.log(randISINs)
 
 
   var questItems = currentUser && currentUser.quests ? currentUser.quests : [];
@@ -49,9 +40,9 @@ const page = async () => {
     points: 0
   }
   if (currentUser) {user.points = currentUser?.points}
-  setTimeout(() => console.log(), 500)
 
-  return <QuestComponent quests={testItems} user={user} />
+
+  return <QuestComponent quests={testItems} user={user} randISINs={randISINs} redeemableRewards={rewards}/>
 };
 
 export default page;

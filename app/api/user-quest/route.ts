@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: any, res: any) {
   await clientPromise;
-  console.log("somehow get here?");
   const data = await req.json();
   const { clerkId, quests } = data;
 
@@ -31,7 +30,7 @@ export async function POST(req: any, res: any) {
   try {
     const response = await User.updateOne(filter, update, { upsert: true });
 
-    return NextResponse.json({ message: "Woho 🎉", response, quests });
+    return NextResponse.json({ message: "Woho 🎉" });
   } catch (err: any) {
     if (err.code !== 11000) {
       return NextResponse.json({ message: err.message });

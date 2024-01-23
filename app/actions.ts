@@ -69,6 +69,26 @@ export async function loadQuests(quests: Array<IQuest>) {
   }
 }
 
+
+
+export async function getRandomIsins({count}: {count: number}): Promise<string[] | null> {
+  await clientPromise;
+  try {
+    const pipeline = [
+      { $sample: { size: count } },
+      { $project: { _id: 0, ISIN: 1 } }
+    ];
+    const stocks = await Stock.aggregate(pipeline);
+    if (stocks && stocks.length) {
+      const isins = stocks.map((stock) => stock.ISIN);
+      return isins;
+    }
+    return null;
+  } catch (err) {
+    return null;
+  }
+}
+
 export async function getStocks(query: string): Promise<IStock[] | null> {
   await clientPromise;
   try {
@@ -148,6 +168,60 @@ export async function getStockPricing(lsid: string | undefined) {
   } else {
     const priceData = await response.json();
     return priceData;
+  }
+}
+
+export async function getFreeStock(
+  totalPurchaseCost: number,
+  numQuantity: number,
+  isin: string,
+  lsid: string
+) {
+  await clientPromise;
+  const user: IUser | null = await getUser();
+
+  const clerkId = user?.clerkId;
+  try {
+    const user = await User.findOne({ clerkId: clerkId });
+    if (user) {
+      if (user.money < totalPurchaseCost) {
+        console.warn("Insufficient Balance");
+        return null;
+      }
+      const stock: IStock | null = await getStockByIsin(isin);
+      if (!stock) {
+        console.warn("Invalid ISIN");
+        return null;
+      }
+
+      // Check if the user already holds this stock, if so update quantity else add the stock in holdings.
+      let holding = user.holdings.find((h: IHolding) => h.ISIN === isin);
+      if (holding) {
+        holding.quantity += numQuantity;
+      } else {
+        holding = {
+          ISIN: isin,
+          quantity: numQuantity, // assuming 1 stock is bought if totalPurchaseCost equals stockPrice
+          LSID: lsid,
+        };
+        user.holdings.push(holding);
+      }
+
+      // Update money and holdings in the user document
+      user.money -= totalPurchaseCost;
+      user.moneySpent += totalPurchaseCost;
+      let lastPortfolioValue =
+        user.portfolioValue[user.portfolioValue.length - 1].value;
+      user.portfolioValue.push({
+        date: new Date(),
+        value: lastPortfolioValue,
+      });
+
+      await user.save();
+      revalidatePath("/portfolio");
+    }
+  } catch (err) {
+    console.log(err);
   }
 }
 
