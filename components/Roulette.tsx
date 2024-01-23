@@ -45,7 +45,7 @@ const Roulette = ({ imageData, mustSpin }: {imageData: any, mustSpin: boolean}) 
 
   // const handleSpinClick = () => {
   //   if (!mustSpin) {
-  //     // setMustSpin(true);
+  //     mustSpin = true;
   //   }
   // }
   // const newPrizeNumber = Math.floor(Math.random() * data.length);
@@ -55,7 +55,10 @@ const Roulette = ({ imageData, mustSpin }: {imageData: any, mustSpin: boolean}) 
 
 
 const handleSpinStop = () => {
-  getFreeStock(1, boxes[prizeNumber]);
+  let url = boxes[prizeNumber];
+let parts = url.split("/");
+let stock = parts[5];
+  getFreeStock(1, stock);
 };
 
 return (

@@ -34,12 +34,12 @@ const RedeemableReward = ({ reward, setPoints, points, mustSpin, setMustSpin }: 
                 addMoney(5)
             } else if (reward.name == '+50€ for your account') {
                 addMoney(50)
-            } else if (reward.name == 'Spin the Wheel and get a free stock!') {
-                if(!mustSpin){setMustSpin(true)}
             }
             setPoints(points - reward.cost)
             addPoints( - reward.cost)
-
+            if (reward.name == 'Spin the Wheel and get a free stock!') {
+                if(!mustSpin){setMustSpin(true)}
+            }
         } else {
             setClickState(true)
             setTimeout(() => setClickState(false), 500)

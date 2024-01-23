@@ -36,7 +36,7 @@ const QuestComponent = ({
           </div>
           <Roulette imageData={imageData} mustSpin={mustSpin}/>
         </div>
-        <div className="gap-5 overflow-y-scroll lg:h-96  overflow-x-hidden custom-scrollbar">
+        <div className="gap-5 overflow-y-scroll lg:h-[80vh]  overflow-x-hidden custom-scrollbar">
           <div className="relative flex flex-col py-5 space-y-4 w-full lx:w-1/2">
             <h1 className="text-2xl font-bold mb-5">Open Quests</h1>
             {quests.map((quest) => (
