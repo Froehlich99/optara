@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { useUser } from "@clerk/nextjs";
-import { addMoney } from "../app/actions";
+import { addMoney, addPoints } from "../app/actions";
 import { motion } from 'framer-motion';
 
 
@@ -38,6 +38,7 @@ const RedeemableReward = ({ reward, setPoints, points, mustSpin, setMustSpin }: 
                 if(!mustSpin){setMustSpin(true)}
             }
             setPoints(points - reward.cost)
+            addPoints( - reward.cost)
 
         } else {
             setClickState(true)

@@ -34,7 +34,7 @@ const QuestComponent = ({
             <h1 className="bold-32">Quests</h1>
             <h1 className="bold-20">{points} Points</h1>
           </div>
-          <Roulette imageData={imageData} />
+          <Roulette imageData={imageData} mustSpin={mustSpin}/>
         </div>
         <div className="gap-5 overflow-y-scroll lg:h-96  overflow-x-hidden custom-scrollbar">
           <div className="relative flex flex-col py-5 space-y-4 w-full lx:w-1/2">
@@ -67,7 +67,7 @@ const QuestComponent = ({
         <h1 className="bold-32">Redeem Points</h1>
         <div className="grid grid-cols-3 py-5 gap-4">
           {redeemableRewards.map((reward: any) => (
-            <RedeemableReward reward={reward} points={points} />
+            <RedeemableReward reward={reward} points={points} setPoints={setPoints} mustSpin={mustSpin} setMustSpin={setMustSpin}/>
           ))}
         </div>
       </div>
