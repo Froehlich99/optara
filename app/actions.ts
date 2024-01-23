@@ -107,6 +107,7 @@ export async function getUser() {
     const userObject = await userData.toObject();
     const userString = await JSON.stringify(userObject);
     const userJson = await JSON.parse(userString);
+    revalidatePath("/portfolio");
     return userJson;
   }
   revalidatePath("/portfolio");
@@ -119,11 +120,14 @@ export async function getStockByIsin(isin: string): Promise<IStock | null> {
     if (stock) {
       const plainObject = stock.toObject();
       plainObject._id = plainObject._id.toString();
+      revalidatePath("/stocks");
       return plainObject;
     } else {
+      revalidatePath("/stocks");
       return null;
     }
   } catch (err) {
+    revalidatePath("/stocks");
     return null;
   }
 }
@@ -135,7 +139,7 @@ export async function getStockPricing(lsid: string | undefined) {
   }
   const response = await fetch(
     `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${lsid}`,
-    { cache: "no-store" }
+    { cache: "no-cache" }
   );
 
   if (!response.ok) {
