@@ -171,6 +171,39 @@ export async function getStockPricing(lsid: string | undefined) {
   }
 }
 
+export async function addPoints(amount: number) {
+  await clientPromise;
+  const user: IUser | null = await getUser();
+
+  const clerkId = user?.clerkId;
+  try {
+    const user = await User.findOne({ clerkId: clerkId });
+    if (user) {
+      user.points += amount
+      await user.save();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function addMoney(amount: number) {
+  await clientPromise;
+  const user: IUser | null = await getUser();
+
+  const clerkId = user?.clerkId;
+  try {
+    const user = await User.findOne({ clerkId: clerkId });
+    if (user) {
+      user.money += amount
+      
+      await user.save();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 export async function getFreeStock(
   numQuantity: number,
   isin: string,

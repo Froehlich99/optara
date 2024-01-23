@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimateSharedLayout, color } from "framer-motion";
 import { faker } from "@faker-js/faker";
 import ImageWithFallback from "./ImageWithFallback";
@@ -11,11 +11,15 @@ type Props = {
   imageData: string[];
 };
 
-const Roulette = ({ imageData }: Props) => {
-  const [animation, setAnimation] = useState(false);
-  const [mustSpin, setMustSpin] = useState(false);
+const Roulette = ({ imageData, mustSpin }: {imageData: any, mustSpin: boolean}) => {
+  // const [mustSpin, setMustSpin] = useState(false);
   const [prizeNumber, setPrizeNumber] = useState(0);
-  const boxes = imageData;
+  const [stockImageData, setStockImageData] = useState(imageData)
+  // let boxes: any[] = [];
+  // if (!mustSpin) {
+  //   setStockImageData(imageData)
+  // }
+  const boxes = stockImageData
 
   const parent = {
     visible: {
@@ -44,35 +48,38 @@ const Roulette = ({ imageData }: Props) => {
     }
   });
 
-  const handleSpinClick = () => {
-    if (!mustSpin) {
-      const newPrizeNumber = Math.floor(Math.random() * data.length);
-      setPrizeNumber(newPrizeNumber);
-      setMustSpin(true);
-    }
-  };
+  // const handleSpinClick = () => {
+  //   if (!mustSpin) {
+  //     mustSpin = true;
+  //   }
+  // }
+  // const newPrizeNumber = Math.floor(Math.random() * data.length);
+  // setPrizeNumber(newPrizeNumber);
+  // setMustSpin(true);
 
-  const handleSpinStop = () => {
-    getFreeStock(1, boxes[prizeNumber]);
-  };
 
-  useEffect(() => {
-    // perform an action when the component is first mounted
-  }, []);
-  return (
-    <div className="flex justify-center">
-      <Wheel
-        mustStartSpinning={mustSpin}
-        prizeNumber={prizeNumber}
-        data={data}
-        backgroundColors={["#ffffff"]}
-        textColors={["#ffffff"]}
-        onStopSpinning={() => handleSpinStop()}
-        // onComplete={}
-      />
-      <button onClick={() => handleSpinClick()}>Spin!</button>
-    </div>
-  );
+
+const handleSpinStop = () => {
+  let url = boxes[prizeNumber];
+let parts = url.split("/");
+let stock = parts[5];
+  getFreeStock(1, stock);
+};
+
+return (
+  <div className="flex justify-center">
+    <Wheel
+      mustStartSpinning={mustSpin}
+      prizeNumber={prizeNumber}
+      data={data}
+      backgroundColors={["#ffffff"]}
+      textColors={["#ffffff"]}
+      onStopSpinning={() => handleSpinStop()}
+    // onComplete={}
+    />
+    {/* <button onClick={() => handleSpinClick()}>Spin!</button> */}
+  </div>
+);
 };
 
 export default Roulette;
