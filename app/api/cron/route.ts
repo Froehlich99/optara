@@ -25,7 +25,9 @@ async function calculatePortfolio(user: IUser) {
 
     const { series } = await response.json();
     const stockPrice =
-      series?.intraday?.data[series.intraday.data.length - 1][1];
+      series?.intraday?.data && series.intraday.data.length > 0
+        ? series.intraday.data[series.intraday.data.length - 1][1]
+        : undefined;
     if (!stockPrice) {
       console.log(`Couldn't find stock price for ${holding.LSID}`);
       continue;
