@@ -1,6 +1,5 @@
 import clientPromise from "@/db/connectDB";
 import User, { IUser } from "@/db/schema/User";
-import { revalidatePath } from "next/cache";
 import type { NextRequest } from "next/server";
 
 async function calculatePortfolio(user: IUser) {
@@ -12,7 +11,7 @@ async function calculatePortfolio(user: IUser) {
     try {
       response = await fetch(
         `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${holding.LSID}`,
-        { next: { revalidate: 0 } }
+        { next: { revalidate: 50 } }
       );
       if (!response.ok || response === undefined) {
         console.log(`Failed to fetch stock information for ${holding.LSID}`);
@@ -65,8 +64,6 @@ export async function GET(request: NextRequest) {
       }
     }
     // Send back a success response
-    revalidatePath("/api/cron");
-    revalidatePath("/portfolio");
     return new Response("Values Updated Successfully");
   } catch (err: any) {
     // Return the error to the client
