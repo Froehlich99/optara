@@ -44,25 +44,23 @@ export const emptyQuests = [
     rewardPoints: 100,
     completion: 0,
   },
-
 ];
-
 
 export const rewards = [
   {
+    name: "Spin the Wheel and get a free stock!",
+    cost: "10",
+  },
+  {
     name: "+5€ for your account",
-    cost: "100"
+    cost: "100",
   },
   {
     name: "+50€ for your account",
-    cost: "900"
+    cost: "900",
   },
   {
     name: "No transaction costs on next buy",
-    cost: "1000"
+    cost: "1000",
   },
-  {
-    name: "Spin the Wheel and get a free stock!",
-    cost: "10"
-  }
-]
+];
