@@ -1,72 +1,86 @@
 import clientPromise from "@/db/connectDB";
 import User, { IUser } from "@/db/schema/User";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-async function calculatePortfolio(user: IUser) {
-  await clientPromise;
-  let totalPortfolioValue = 0;
+const isCronSecretValid = (request: NextRequest): boolean => {
+  const authHeader = request.headers.get("authorization");
+  return authHeader === `Bearer ${process.env.CRON_SECRET}`;
+};
 
-  for (const holding of user.holdings) {
-    let response;
-    try {
-      response = await fetch(
-        `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${holding.LSID}`,
-        { next: { revalidate: 50 } }
-      );
-      if (!response.ok || response === undefined) {
-        console.log(`Failed to fetch stock information for ${holding.LSID}`);
-        continue;
-      }
-    } catch (e) {
-      console.log(`Failed to fetch stock information for ${holding.LSID}`);
-      continue;
+async function fetchStockPrice(LSID: string): Promise<number | null> {
+  try {
+    const response = await fetch(
+      `https://www.ls-tc.de/_rpc/json/instrument/chart/dataForInstrument?instrumentId=${LSID}`,
+      { next: { revalidate: 50 } }
+    );
+    if (!response.ok) {
+      throw new Error("Response not ok.");
     }
-
     const { series } = await response.json();
-    const stockPrice =
-      series?.intraday?.data && series.intraday.data.length > 0
-        ? series.intraday.data[series.intraday.data.length - 1][1]
-        : undefined;
-    if (!stockPrice) {
-      console.log(`Couldn't find stock price for ${holding.LSID}`);
-      continue;
+    if (!series?.intraday?.data || series.intraday.data.length === 0) {
+      throw new Error("Stock price data not found.");
     }
-
-    totalPortfolioValue += stockPrice * holding.quantity;
+    return series.intraday.data[series.intraday.data.length - 1][1];
+  } catch (e) {
+    console.error(
+      `Failed to fetch stock information for ${LSID}: ${(e as Error).message}`
+    );
+    return null;
   }
+}
+
+async function calculatePortfolio(user: IUser): Promise<void> {
+  await clientPromise; // Ensure the database connection is established.
+
+  // Use Promise.all to fetch all stock prices in parallel.
+  const stockPricesPromises = user.holdings.map((holding) =>
+    fetchStockPrice(holding.LSID)
+  );
+
+  const stockPrices = await Promise.all(stockPricesPromises);
+
+  // Calculate the total portfolio value.
+  let totalPortfolioValue = user.holdings.reduce((acc, holding, index) => {
+    const stockPrice = stockPrices[index];
+    if (stockPrice === null) return acc; // Skip if stockPrice couldn't be fetched.
+    return acc + stockPrice * holding.quantity;
+  }, 0);
 
   user.portfolioValue.push({
     date: new Date(),
     value: totalPortfolioValue + user.money,
   });
 
-  // Build the updated User object
-  const updatedUser = new User(user);
-
-  // Save the updated User to the database
-  await updatedUser.save();
+  // Use update operation directly
+  await User.updateOne(
+    { _id: user._id },
+    { $set: { portfolioValue: user.portfolioValue } }
+  );
 }
 
-export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response("Unauthorized", {
-      status: 401,
-    });
+export async function GET(request: NextRequest): Promise<Response> {
+  if (!isCronSecretValid(request)) {
+    return new Response("Unauthorized", { status: 401 });
   }
   try {
-    // Find all users
-    const users = await User.find({});
-    // Iterate over each user, fetch their stocks, and calculate their portfolio value
-    for (const user of users) {
-      if (user.holdings.length > 0) {
-        await calculatePortfolio(user);
-      }
-    }
-    // Send back a success response
+    // Query users and only fetch necessary fields.
+    const users = await User.find({}).select(
+      "_id holdings money portfolioValue"
+    );
+
+    // Process users in parallel
+    await Promise.all(
+      users.map((user) => {
+        if (user.holdings.length > 0) {
+          return calculatePortfolio(user);
+        }
+        return null; // Return null for users with no holdings.
+      })
+    );
+
     return new Response("Values Updated Successfully");
-  } catch (err: any) {
-    // Return the error to the client
-    return new Response(err.message);
+  } catch (err) {
+    console.error(err);
+    return new Response((err as Error).message, { status: 500 });
   }
 }
